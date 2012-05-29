@@ -56,7 +56,10 @@ am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
 am_turing_OBJECTS = src/turing-turing.$(OBJEXT) \
-	src/model/turing-TuringModel.$(OBJEXT)
+	src/model/turing-TuringModel.$(OBJEXT) \
+	src/ode/turing-RK4Stepper.$(OBJEXT) \
+	src/myrng1.3/turing-MTEngine.$(OBJEXT) \
+	src/myrng1.3/turing-WELLEngine.$(OBJEXT)
 turing_OBJECTS = $(am_turing_OBJECTS)
 am__DEPENDENCIES_1 =
 turing_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -128,7 +131,7 @@ CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEPMODE = @CXXDEPMODE@
-CXXFLAGS = @CXXFLAGS@
+CXXFLAGS = -O0 -g
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
@@ -230,7 +233,16 @@ turing_SOURCES = \
 	src/model/TuringModel.h \
 	src/model/TuringModel.cpp \
 	src/ode/ODE.h \
-	src/ode/Stepper.h
+	src/ode/Stepper.h \
+	src/ode/RK4Stepper.h \
+	src/ode/RK4Stepper.cpp \
+	src/myrng1.3/MTEngine.cpp \
+	src/myrng1.3/MTEngine.h \
+	src/myrng1.3/myrng.h \
+	src/myrng1.3/RandomVariates.h \
+	src/myrng1.3/util.h \
+	src/myrng1.3/WELLEngine.cpp \
+	src/myrng1.3/WELLEngine.h
 
 turing_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_CXXFLAGS) $(DEPS_CFLAGS)
 turing_LDADD = $(DEPS_LIBS)
@@ -341,6 +353,25 @@ src/model/$(DEPDIR)/$(am__dirstamp):
 	@: > src/model/$(DEPDIR)/$(am__dirstamp)
 src/model/turing-TuringModel.$(OBJEXT): src/model/$(am__dirstamp) \
 	src/model/$(DEPDIR)/$(am__dirstamp)
+src/ode/$(am__dirstamp):
+	@$(MKDIR_P) src/ode
+	@: > src/ode/$(am__dirstamp)
+src/ode/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/ode/$(DEPDIR)
+	@: > src/ode/$(DEPDIR)/$(am__dirstamp)
+src/ode/turing-RK4Stepper.$(OBJEXT): src/ode/$(am__dirstamp) \
+	src/ode/$(DEPDIR)/$(am__dirstamp)
+src/myrng1.3/$(am__dirstamp):
+	@$(MKDIR_P) src/myrng1.3
+	@: > src/myrng1.3/$(am__dirstamp)
+src/myrng1.3/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/myrng1.3/$(DEPDIR)
+	@: > src/myrng1.3/$(DEPDIR)/$(am__dirstamp)
+src/myrng1.3/turing-MTEngine.$(OBJEXT): src/myrng1.3/$(am__dirstamp) \
+	src/myrng1.3/$(DEPDIR)/$(am__dirstamp)
+src/myrng1.3/turing-WELLEngine.$(OBJEXT):  \
+	src/myrng1.3/$(am__dirstamp) \
+	src/myrng1.3/$(DEPDIR)/$(am__dirstamp)
 turing$(EXEEXT): $(turing_OBJECTS) $(turing_DEPENDENCIES) $(EXTRA_turing_DEPENDENCIES) 
 	@rm -f turing$(EXEEXT)
 	$(AM_V_CXXLD)$(turing_LINK) $(turing_OBJECTS) $(turing_LDADD) $(LIBS)
@@ -348,6 +379,9 @@ turing$(EXEEXT): $(turing_OBJECTS) $(turing_DEPENDENCIES) $(EXTRA_turing_DEPENDE
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f src/model/turing-TuringModel.$(OBJEXT)
+	-rm -f src/myrng1.3/turing-MTEngine.$(OBJEXT)
+	-rm -f src/myrng1.3/turing-WELLEngine.$(OBJEXT)
+	-rm -f src/ode/turing-RK4Stepper.$(OBJEXT)
 	-rm -f src/turing-turing.$(OBJEXT)
 
 distclean-compile:
@@ -355,6 +389,9 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/turing-turing.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-TuringModel.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/myrng1.3/$(DEPDIR)/turing-MTEngine.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/myrng1.3/$(DEPDIR)/turing-WELLEngine.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/ode/$(DEPDIR)/turing-RK4Stepper.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -399,6 +436,48 @@ src/model/turing-TuringModel.obj: src/model/TuringModel.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/model/TuringModel.cpp' object='src/model/turing-TuringModel.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/model/turing-TuringModel.obj `if test -f 'src/model/TuringModel.cpp'; then $(CYGPATH_W) 'src/model/TuringModel.cpp'; else $(CYGPATH_W) '$(srcdir)/src/model/TuringModel.cpp'; fi`
+
+src/ode/turing-RK4Stepper.o: src/ode/RK4Stepper.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/ode/turing-RK4Stepper.o -MD -MP -MF src/ode/$(DEPDIR)/turing-RK4Stepper.Tpo -c -o src/ode/turing-RK4Stepper.o `test -f 'src/ode/RK4Stepper.cpp' || echo '$(srcdir)/'`src/ode/RK4Stepper.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/ode/$(DEPDIR)/turing-RK4Stepper.Tpo src/ode/$(DEPDIR)/turing-RK4Stepper.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/ode/RK4Stepper.cpp' object='src/ode/turing-RK4Stepper.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/ode/turing-RK4Stepper.o `test -f 'src/ode/RK4Stepper.cpp' || echo '$(srcdir)/'`src/ode/RK4Stepper.cpp
+
+src/ode/turing-RK4Stepper.obj: src/ode/RK4Stepper.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/ode/turing-RK4Stepper.obj -MD -MP -MF src/ode/$(DEPDIR)/turing-RK4Stepper.Tpo -c -o src/ode/turing-RK4Stepper.obj `if test -f 'src/ode/RK4Stepper.cpp'; then $(CYGPATH_W) 'src/ode/RK4Stepper.cpp'; else $(CYGPATH_W) '$(srcdir)/src/ode/RK4Stepper.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/ode/$(DEPDIR)/turing-RK4Stepper.Tpo src/ode/$(DEPDIR)/turing-RK4Stepper.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/ode/RK4Stepper.cpp' object='src/ode/turing-RK4Stepper.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/ode/turing-RK4Stepper.obj `if test -f 'src/ode/RK4Stepper.cpp'; then $(CYGPATH_W) 'src/ode/RK4Stepper.cpp'; else $(CYGPATH_W) '$(srcdir)/src/ode/RK4Stepper.cpp'; fi`
+
+src/myrng1.3/turing-MTEngine.o: src/myrng1.3/MTEngine.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/myrng1.3/turing-MTEngine.o -MD -MP -MF src/myrng1.3/$(DEPDIR)/turing-MTEngine.Tpo -c -o src/myrng1.3/turing-MTEngine.o `test -f 'src/myrng1.3/MTEngine.cpp' || echo '$(srcdir)/'`src/myrng1.3/MTEngine.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/myrng1.3/$(DEPDIR)/turing-MTEngine.Tpo src/myrng1.3/$(DEPDIR)/turing-MTEngine.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/myrng1.3/MTEngine.cpp' object='src/myrng1.3/turing-MTEngine.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/myrng1.3/turing-MTEngine.o `test -f 'src/myrng1.3/MTEngine.cpp' || echo '$(srcdir)/'`src/myrng1.3/MTEngine.cpp
+
+src/myrng1.3/turing-MTEngine.obj: src/myrng1.3/MTEngine.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/myrng1.3/turing-MTEngine.obj -MD -MP -MF src/myrng1.3/$(DEPDIR)/turing-MTEngine.Tpo -c -o src/myrng1.3/turing-MTEngine.obj `if test -f 'src/myrng1.3/MTEngine.cpp'; then $(CYGPATH_W) 'src/myrng1.3/MTEngine.cpp'; else $(CYGPATH_W) '$(srcdir)/src/myrng1.3/MTEngine.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/myrng1.3/$(DEPDIR)/turing-MTEngine.Tpo src/myrng1.3/$(DEPDIR)/turing-MTEngine.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/myrng1.3/MTEngine.cpp' object='src/myrng1.3/turing-MTEngine.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/myrng1.3/turing-MTEngine.obj `if test -f 'src/myrng1.3/MTEngine.cpp'; then $(CYGPATH_W) 'src/myrng1.3/MTEngine.cpp'; else $(CYGPATH_W) '$(srcdir)/src/myrng1.3/MTEngine.cpp'; fi`
+
+src/myrng1.3/turing-WELLEngine.o: src/myrng1.3/WELLEngine.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/myrng1.3/turing-WELLEngine.o -MD -MP -MF src/myrng1.3/$(DEPDIR)/turing-WELLEngine.Tpo -c -o src/myrng1.3/turing-WELLEngine.o `test -f 'src/myrng1.3/WELLEngine.cpp' || echo '$(srcdir)/'`src/myrng1.3/WELLEngine.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/myrng1.3/$(DEPDIR)/turing-WELLEngine.Tpo src/myrng1.3/$(DEPDIR)/turing-WELLEngine.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/myrng1.3/WELLEngine.cpp' object='src/myrng1.3/turing-WELLEngine.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/myrng1.3/turing-WELLEngine.o `test -f 'src/myrng1.3/WELLEngine.cpp' || echo '$(srcdir)/'`src/myrng1.3/WELLEngine.cpp
+
+src/myrng1.3/turing-WELLEngine.obj: src/myrng1.3/WELLEngine.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/myrng1.3/turing-WELLEngine.obj -MD -MP -MF src/myrng1.3/$(DEPDIR)/turing-WELLEngine.Tpo -c -o src/myrng1.3/turing-WELLEngine.obj `if test -f 'src/myrng1.3/WELLEngine.cpp'; then $(CYGPATH_W) 'src/myrng1.3/WELLEngine.cpp'; else $(CYGPATH_W) '$(srcdir)/src/myrng1.3/WELLEngine.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/myrng1.3/$(DEPDIR)/turing-WELLEngine.Tpo src/myrng1.3/$(DEPDIR)/turing-WELLEngine.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/myrng1.3/WELLEngine.cpp' object='src/myrng1.3/turing-WELLEngine.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/myrng1.3/turing-WELLEngine.obj `if test -f 'src/myrng1.3/WELLEngine.cpp'; then $(CYGPATH_W) 'src/myrng1.3/WELLEngine.cpp'; else $(CYGPATH_W) '$(srcdir)/src/myrng1.3/WELLEngine.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -651,6 +730,10 @@ distclean-generic:
 	-rm -f src/$(am__dirstamp)
 	-rm -f src/model/$(DEPDIR)/$(am__dirstamp)
 	-rm -f src/model/$(am__dirstamp)
+	-rm -f src/myrng1.3/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/myrng1.3/$(am__dirstamp)
+	-rm -f src/ode/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/ode/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -661,7 +744,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf src/$(DEPDIR) src/model/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) src/model/$(DEPDIR) src/myrng1.3/$(DEPDIR) src/ode/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-tags
@@ -709,7 +792,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf src/$(DEPDIR) src/model/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) src/model/$(DEPDIR) src/myrng1.3/$(DEPDIR) src/ode/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
