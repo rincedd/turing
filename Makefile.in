@@ -39,8 +39,8 @@ bin_PROGRAMS = turing$(EXEEXT)
 subdir = .
 DIST_COMMON = $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
-	$(top_srcdir)/configure ChangeLog config.guess config.sub \
-	depcomp install-sh missing
+	$(top_srcdir)/configure config.guess config.sub depcomp \
+	install-sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ac_prog_try_doxygen.m4 \
 	$(top_srcdir)/m4/boost.m4 $(top_srcdir)/configure.ac
@@ -55,7 +55,8 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am_turing_OBJECTS = src/turing-turing.$(OBJEXT)
+am_turing_OBJECTS = src/turing-turing.$(OBJEXT) \
+	src/model/turing-TuringModel.$(OBJEXT)
 turing_OBJECTS = $(am_turing_OBJECTS)
 am__DEPENDENCIES_1 =
 turing_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -82,6 +83,16 @@ CXXLINK = $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) \
 AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD " $@;
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+AM_V_CC = $(am__v_CC_@AM_V@)
+am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
+am__v_CC_0 = @echo "  CC    " $@;
+CCLD = $(CC)
+LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+AM_V_CCLD = $(am__v_CCLD_@AM_V@)
+am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
+am__v_CCLD_0 = @echo "  CCLD  " $@;
 AM_V_GEN = $(am__v_GEN_@AM_V@)
 am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
 am__v_GEN_0 = @echo "  GEN   " $@;
@@ -215,7 +226,11 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS} -I m4
 turing_SOURCES = \
-	src/turing.cpp
+	src/turing.cpp \
+	src/model/TuringModel.h \
+	src/model/TuringModel.cpp \
+	src/ode/ODE.h \
+	src/ode/Stepper.h
 
 turing_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_CXXFLAGS) $(DEPS_CFLAGS)
 turing_LDADD = $(DEPS_LIBS)
@@ -318,18 +333,28 @@ src/$(DEPDIR)/$(am__dirstamp):
 	@: > src/$(DEPDIR)/$(am__dirstamp)
 src/turing-turing.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
+src/model/$(am__dirstamp):
+	@$(MKDIR_P) src/model
+	@: > src/model/$(am__dirstamp)
+src/model/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/model/$(DEPDIR)
+	@: > src/model/$(DEPDIR)/$(am__dirstamp)
+src/model/turing-TuringModel.$(OBJEXT): src/model/$(am__dirstamp) \
+	src/model/$(DEPDIR)/$(am__dirstamp)
 turing$(EXEEXT): $(turing_OBJECTS) $(turing_DEPENDENCIES) $(EXTRA_turing_DEPENDENCIES) 
 	@rm -f turing$(EXEEXT)
 	$(AM_V_CXXLD)$(turing_LINK) $(turing_OBJECTS) $(turing_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f src/model/turing-TuringModel.$(OBJEXT)
 	-rm -f src/turing-turing.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/turing-turing.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-TuringModel.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -360,6 +385,20 @@ src/turing-turing.obj: src/turing.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/turing.cpp' object='src/turing-turing.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/turing-turing.obj `if test -f 'src/turing.cpp'; then $(CYGPATH_W) 'src/turing.cpp'; else $(CYGPATH_W) '$(srcdir)/src/turing.cpp'; fi`
+
+src/model/turing-TuringModel.o: src/model/TuringModel.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/model/turing-TuringModel.o -MD -MP -MF src/model/$(DEPDIR)/turing-TuringModel.Tpo -c -o src/model/turing-TuringModel.o `test -f 'src/model/TuringModel.cpp' || echo '$(srcdir)/'`src/model/TuringModel.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/model/$(DEPDIR)/turing-TuringModel.Tpo src/model/$(DEPDIR)/turing-TuringModel.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/model/TuringModel.cpp' object='src/model/turing-TuringModel.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/model/turing-TuringModel.o `test -f 'src/model/TuringModel.cpp' || echo '$(srcdir)/'`src/model/TuringModel.cpp
+
+src/model/turing-TuringModel.obj: src/model/TuringModel.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/model/turing-TuringModel.obj -MD -MP -MF src/model/$(DEPDIR)/turing-TuringModel.Tpo -c -o src/model/turing-TuringModel.obj `if test -f 'src/model/TuringModel.cpp'; then $(CYGPATH_W) 'src/model/TuringModel.cpp'; else $(CYGPATH_W) '$(srcdir)/src/model/TuringModel.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/model/$(DEPDIR)/turing-TuringModel.Tpo src/model/$(DEPDIR)/turing-TuringModel.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/model/TuringModel.cpp' object='src/model/turing-TuringModel.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/model/turing-TuringModel.obj `if test -f 'src/model/TuringModel.cpp'; then $(CYGPATH_W) 'src/model/TuringModel.cpp'; else $(CYGPATH_W) '$(srcdir)/src/model/TuringModel.cpp'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -610,6 +649,8 @@ distclean-generic:
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f src/$(DEPDIR)/$(am__dirstamp)
 	-rm -f src/$(am__dirstamp)
+	-rm -f src/model/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/model/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -620,7 +661,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf src/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) src/model/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-tags
@@ -668,7 +709,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf src/$(DEPDIR)
+	-rm -rf src/$(DEPDIR) src/model/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
