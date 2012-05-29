@@ -6,10 +6,10 @@
 #ifndef STEPPER_H_
 #define STEPPER_H_
 
+#include "ODE.h"
+
 namespace ode
 {
-
-class ODE;
 
 /**
  * 
