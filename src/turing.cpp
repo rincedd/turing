@@ -27,21 +27,21 @@ int main(int argc, char **argv)
 {
 	Graph net(1, 1);
 	myrng::WELL1024a rng;
-	generators::randomGnm(net, 10, 20, rng, false);
+	generators::randomBA(net, 100, 15, rng);
+	std::cout << "BA network with N = " << net.numberOfNodes() << " and L = "
+			<< net.numberOfEdges() << " (<k> = "
+			<< 2.0 * net.numberOfEdges() / net.numberOfNodes() << ").\n";
 
-	measures::sparse_dmatrix_t lap = measures::laplacian(net);
-
-	std::cout << lap << "\n";
-
-	TuringModel::Params p = { 0.165, 15 };
+	TuringModel::Params p =
+	{ 0.12, 12 };
 	TuringModel m(net, p, f, g);
 
 	double t = 0;
-	std::cout << "Setting u[3] = 1 and v[5] = 1.\n";
-	std::cout << "k_3 = " << net.node(3)->degree() << ", k_5 = " << net.node(5)->degree() << ".\n";
-	m.concentrations()[3] = 1.0;
-	m.concentrations()[15] = 1.0;
-	std::cout << t << "\t" << m.concentrations() << "\n";
+	for (ode::ODE::size_type i = 0; i < m.dim(); ++i)
+	{
+		m.concentrations()[i] = rng.GaussianPolar(0, 0.1);
+	}
+//	std::cout << t << "\t" << m.concentrations() << "\n";
 	ode::dvector dydx(m.dim());
 	ode::RK4Stepper stepper(t, m.concentrations(), dydx);
 	double interval = 10, next = interval;
@@ -51,7 +51,8 @@ int main(int argc, char **argv)
 		t += stepper.step(h, m);
 		if (t >= next)
 		{
-			std::cout << t << "\t" << m.concentrations() << "\n";
+			std::cout << t << "\t" << m.patternAmplitude() << "\n";
+			// std::cout << t << "\t" << m.concentrations() << "\n";
 			next += interval;
 		}
 	}

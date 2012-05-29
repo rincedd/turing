@@ -1,7 +1,5 @@
 ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS} -I m4
 
-CXXFLAGS = -O0 -g
-
 bin_PROGRAMS = turing
 
 turing_SOURCES = \

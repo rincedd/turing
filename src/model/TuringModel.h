@@ -48,6 +48,8 @@ public:
 	const ode::dvector& concentrations() const;
 	ode::dvector& concentrations();
 
+	double patternAmplitude() const;
+
 private:
 	largenet::Graph& graph_;
 	Params par_;
