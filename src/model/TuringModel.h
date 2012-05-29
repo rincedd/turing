@@ -32,13 +32,21 @@ public:
 			coupling_function_t inhibitor_coupling);
 	virtual ~TuringModel();
 
+	size_type dim() const
+	{
+		return 2 * graph_.numberOfNodes();
+	}
+
 	void recomputeLaplacian();
-	void initialize(const ode::dvector& activator, const ode::dvector& inhibitor);
+	void initialize(const ode::dvector& activator,
+			const ode::dvector& inhibitor);
 
 	void operator()(const double x, ode::dvector& y, ode::dvector& dydx);
 
 	ode::dvector activator() const;
 	ode::dvector inhibitor() const;
+	const ode::dvector& concentrations() const;
+	ode::dvector& concentrations();
 
 private:
 	largenet::Graph& graph_;
