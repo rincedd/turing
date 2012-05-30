@@ -31,7 +31,8 @@ public:
 			model_(model)
 	{
 	}
-	void operator()(const ode::dvector& state, double t)
+	void operator()(const TuringModel::state_type& state,
+			const TuringModel::time_type t)
 	{
 		std::cout << t << "\t" << model_.patternAmplitude() << "\n";
 	}
@@ -53,19 +54,20 @@ int main(int argc, char **argv)
 	TuringModel m(net, p, f, g);
 
 	double t = 0;
-	for (ode::ODE::size_type i = 0; i < m.dim(); ++i)
+	for (size_t i = 0; i < m.dim(); ++i)
 	{
 		m.concentrations()[i] = rng.GaussianPolar(0, 1e-8);
 	}
 
-	typedef bno::runge_kutta_dopri5<ode::dvector> error_stepper_t;
+	typedef bno::runge_kutta_dopri5<TuringModel::state_type> error_stepper_t;
 	bno::result_of::make_controlled<error_stepper_t>::type stepper =
 			bno::make_controlled(1e-3, 1e-2, error_stepper_t());
-//	bno::runge_kutta4<ode::dvector> stepper = bno::runge_kutta4<ode::dvector>();
-//	bno::adams_bashforth_moulton<5, ode::dvector> stepper = bno::adams_bashforth_moulton<5, ode::dvector>();
+//	bno::runge_kutta4<TuringModel::state_type> stepper = bno::runge_kutta4<TuringModel::state_type>();
+//	bno::adams_bashforth_moulton<5, TuringModel::state_type> stepper = bno::adams_bashforth_moulton<5, TuringModel::state_type>();
 
 	Output out(m);
-	size_t n_steps = bno::integrate_const(stepper, m, m.concentrations(), 0.0, 10.0, 0.5, out);
+	size_t n_steps = bno::integrate_const(stepper, m, m.concentrations(), 0.0,
+			10.0, 0.5, out);
 
 	std::cout << "Integration took " << n_steps << " steps.\n";
 

@@ -1,7 +1,4 @@
 #include "TuringModel.h"
-#include <largenet2.h>
-#include <cassert>
-#include <boost/numeric/ublas/vector_proxy.hpp>
 #include <cmath>
 
 using namespace largenet;
@@ -10,43 +7,27 @@ namespace bnu = boost::numeric::ublas;
 TuringModel::TuringModel(Graph& g, Params p,
 		coupling_function_t activator_coupling,
 		coupling_function_t inhibitor_coupling) :
-		graph_(g), par_(p), concentrations_(2 * g.numberOfNodes()), activator_coupling_(
+		graph_(g), par_(p), concentrations_(2 * g.numberOfNodes(), 0), activator_coupling_(
 				activator_coupling), inhibitor_coupling_(inhibitor_coupling), laplacian_(
 				measures::laplacian(g))
 {
-	concentrations_ *= 0;
 }
 
 TuringModel::~TuringModel()
 {
 }
 
-void TuringModel::initialize(const ode::dvector& activator,
-		const ode::dvector& inhibitor)
+void TuringModel::recomputeLaplacian()
 {
-	assert(activator.size() == graph_.numberOfNodes());
-	assert(inhibitor.size() == graph_.numberOfNodes());
-	bnu::subrange(concentrations_, 0, concentrations_.size() / 2) = activator;
-	bnu::subrange(concentrations_, concentrations_.size() / 2,
-			concentrations_.size()) = activator;
+	laplacian_ = largenet::measures::laplacian(graph_);
 }
 
-ode::dvector TuringModel::activator() const
-{
-	return bnu::subrange(concentrations_, 0, dim() / 2);
-}
-
-ode::dvector TuringModel::inhibitor() const
-{
-	return bnu::subrange(concentrations_, dim() / 2, concentrations_.size());
-}
-
-const ode::dvector& TuringModel::concentrations() const
+const TuringModel::state_type& TuringModel::concentrations() const
 {
 	return concentrations_;
 }
 
-ode::dvector& TuringModel::concentrations()
+TuringModel::state_type& TuringModel::concentrations()
 {
 	return concentrations_;
 }
@@ -54,8 +35,8 @@ ode::dvector& TuringModel::concentrations()
 double TuringModel::patternAmplitude() const
 {
 	double mean_act = 0, mean_inh = 0;
-	size_type K = dim() / 2;
-	for (size_type i = 0; i < K; ++i)
+	size_t K = dim() / 2;
+	for (size_t i = 0; i < K; ++i)
 	{
 		mean_act += concentrations_[i];
 		mean_inh += concentrations_[i + K];
@@ -63,7 +44,7 @@ double TuringModel::patternAmplitude() const
 	mean_act /= K;
 	mean_inh /= K;
 	double a = 0;
-	for (size_type i = 0; i < K; ++i)
+	for (size_t i = 0; i < K; ++i)
 	{
 		a += (concentrations_[i] - mean_act) * (concentrations_[i] - mean_act)
 				+ (concentrations_[i + K] - mean_inh)
@@ -72,8 +53,8 @@ double TuringModel::patternAmplitude() const
 	return sqrt(a);
 }
 
-void TuringModel::operator ()(const ode::dvector& y, ode::dvector& dydx,
-		const double x)
+void TuringModel::operator ()(const state_type& y, state_type& dydx,
+		const time_type x)
 {
 	size_t K = y.size() / 2;
 	for (size_t i = 0; i < K; ++i)

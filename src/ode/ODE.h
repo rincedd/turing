@@ -6,32 +6,36 @@
 #ifndef ODE_H_
 #define ODE_H_
 
-#include <boost/numeric/ublas/vector.hpp>
+#include <cstddef>
 
 namespace ode
 {
-
-typedef boost::numeric::ublas::vector<double> dvector;
 
 /**
  * 
  *
  */
+template<class State, class Time>
 class ODE
 {
 public:
-	typedef dvector::size_type size_type;
+	typedef State state_type;
+	typedef Time time_type;
 public:
-	ODE() {}
-	virtual ~ODE() {}
-	virtual size_type dim() const = 0;
+	ODE()
+	{
+	}
+	virtual ~ODE()
+	{
+	}
+	virtual size_t dim() const = 0;
 	/**
 	 * Right-hand side of the ODE, in odeint signature
 	 * @param[in] y current state vector
 	 * @param[out] dydx computed change in state vector
 	 * @param[in] x current value of independent variable
 	 */
-	virtual void operator()(const dvector& y, dvector& dydx, const double x) = 0;
+	virtual void operator()(const state_type& y, state_type& dydx, const time_type x) = 0;
 };
 
 } /* namespace ode */

@@ -6,17 +6,13 @@
 #ifndef TURINGMODEL_H_
 #define TURINGMODEL_H_
 
+#include <largenet2.h>
 #include <largenet2/measures/spectrum.h>
 #include <boost/function.hpp>
 
 #include "../ode/ODE.h"
 
-namespace largenet
-{
-class Graph;
-}
-
-class TuringModel: public ode::ODE
+class TuringModel: public ode::ODE<std::vector<double>, double>
 {
 public:
 	typedef boost::function<double(double u, double v)> coupling_function_t;
@@ -32,21 +28,17 @@ public:
 			coupling_function_t inhibitor_coupling);
 	virtual ~TuringModel();
 
-	size_type dim() const
+	size_t dim() const
 	{
 		return 2 * graph_.numberOfNodes();
 	}
 
 	void recomputeLaplacian();
-	void initialize(const ode::dvector& activator,
-			const ode::dvector& inhibitor);
 
-	void operator()(const ode::dvector& y, ode::dvector& dydx, const double x);
+	void operator()(const state_type& y, state_type& dydx, const time_type x);
 
-	ode::dvector activator() const;
-	ode::dvector inhibitor() const;
-	const ode::dvector& concentrations() const;
-	ode::dvector& concentrations();
+	const state_type& concentrations() const;
+	state_type& concentrations();
 
 	double patternAmplitude() const;
 
@@ -54,13 +46,8 @@ private:
 	largenet::Graph& graph_;
 	Params par_;
 	coupling_function_t activator_coupling_, inhibitor_coupling_;
-	ode::dvector concentrations_; //< activator and inhibitor concentrations
+	state_type concentrations_; //< activator and inhibitor concentrations
 	largenet::measures::sparse_dmatrix_t laplacian_;
 };
-
-inline void TuringModel::recomputeLaplacian()
-{
-	laplacian_ = largenet::measures::laplacian(graph_);
-}
 
 #endif /* TURINGMODEL_H_ */
