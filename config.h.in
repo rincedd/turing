@@ -6,6 +6,9 @@
 /* Define to 1 if you have <boost/foreach.hpp> */
 #undef HAVE_BOOST_FOREACH_HPP
 
+/* Define to 1 if you have <boost/numeric/odeint.hpp> */
+#undef HAVE_BOOST_NUMERIC_ODEINT_HPP
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 

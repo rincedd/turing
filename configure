@@ -608,6 +608,8 @@ DEPS_CFLAGS
 PKG_CONFIG_LIBDIR
 PKG_CONFIG_PATH
 PKG_CONFIG
+USE_BUILTIN_ODEINT_FALSE
+USE_BUILTIN_ODEINT_TRUE
 EGREP
 SED
 CXXCPP
@@ -716,6 +718,7 @@ enable_option_checking
 enable_silent_rules
 enable_dependency_tracking
 with_boost
+with_builtin_odeint
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1363,6 +1366,7 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-boost=DIR        prefix of Boost 1.36.0 [guess]
+  --with-builtin-odeint   Use builtin odeint library (default=yes)
 
 Some influential environment variables:
   CXX         C++ compiler command
@@ -4178,6 +4182,56 @@ fi
 
 
 
+# configure option --with-builtin-odeint [=yes]
+
+# Check whether --with-builtin-odeint was given.
+if test "${with_builtin_odeint+set}" = set; then :
+  withval=$with_builtin_odeint; myodeint="$withval"
+else
+  myodeint=yes
+fi
+
+
+if test "x$myodeint" = xno; then
+  if test x"$boost_cv_inc_path" = xno; then
+  odeint_fallback=yes; myodeint=yes
+else
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+boost_save_CPPFLAGS=$CPPFLAGS
+CPPFLAGS="$CPPFLAGS $BOOST_CPPFLAGS"
+ac_fn_cxx_check_header_mongrel "$LINENO" "boost/numeric/odeint.hpp" "ac_cv_header_boost_numeric_odeint_hpp" "$ac_includes_default"
+if test "x$ac_cv_header_boost_numeric_odeint_hpp" = xyes; then :
+
+$as_echo "#define HAVE_BOOST_NUMERIC_ODEINT_HPP 1" >>confdefs.h
+
+else
+  odeint_fallback=yes; myodeint=yes
+fi
+
+
+CPPFLAGS=$boost_save_CPPFLAGS
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+fi
+
+fi
+
+ if test "x$myodeint" = "xyes"; then
+  USE_BUILTIN_ODEINT_TRUE=
+  USE_BUILTIN_ODEINT_FALSE='#'
+else
+  USE_BUILTIN_ODEINT_TRUE='#'
+  USE_BUILTIN_ODEINT_FALSE=
+fi
+
+
 
 
 
@@ -4670,6 +4724,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${am__fastdepCXX_TRUE}" && test -z "${am__fastdepCXX_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCXX\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${USE_BUILTIN_ODEINT_TRUE}" && test -z "${USE_BUILTIN_ODEINT_FALSE}"; then
+  as_fn_error $? "conditional \"USE_BUILTIN_ODEINT\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 
@@ -6008,3 +6066,9 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
+if test "x$odeint_fallback" = "xyes"; then
+  echo "================================"
+  echo "Could not find odeint library, "
+  echo "falling back on builtin version."
+  echo "================================"
+fi

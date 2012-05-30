@@ -17,7 +17,12 @@ turing_SOURCES = \
 	src/myrng1.3/util.h \
 	src/myrng1.3/WELLEngine.cpp \
 	src/myrng1.3/WELLEngine.h
-	
 
-turing_CXXFLAGS = $(AM_CXXFLAGS) $(BOOST_CXXFLAGS) $(DEPS_CFLAGS)
+if USE_BUILTIN_ODEINT
+ODEINT_CXXFLAGS = -I ${srcdir}/odeint
+else
+ODEINT_CXXFLAGS = 
+endif	
+
+turing_CXXFLAGS = $(AM_CXXFLAGS) $(ODEINT_CXXFLAGS) $(BOOST_CXXFLAGS) $(DEPS_CFLAGS)
 turing_LDADD = $(DEPS_LIBS)

@@ -15,14 +15,21 @@ AC_PROG_TRY_DOXYGEN
 BOOST_REQUIRE([1.36.0])
 BOOST_FOREACH
 
+# configure option --with-builtin-odeint [=yes]
+AC_ARG_WITH([builtin-odeint], 
+			[AS_HELP_STRING([--with-builtin-odeint], [Use builtin odeint library (default=yes)])], 
+			[myodeint="$withval"], 
+			[myodeint=yes])
+
+if test "x$myodeint" = xno; then
+  BOOST_FIND_HEADER([boost/numeric/odeint.hpp], [odeint_fallback=yes; myodeint=yes])
+fi
+
+AM_CONDITIONAL([USE_BUILTIN_ODEINT], [test "x$myodeint" = "xyes"])
+
 PKG_PROG_PKG_CONFIG
 PKG_CHECK_MODULES([DEPS], [largenet2 >= 0.3])
  
-# Checks for typedefs, structures, and compiler characteristics.
-AC_TYPE_SIZE_T
-AC_HEADER_STDBOOL
-AC_C_INLINE
-
 # Sanity check
 AC_CONFIG_SRCDIR([src/turing.cpp])
 
@@ -33,3 +40,9 @@ AC_CONFIG_HEADERS([config.h])
 
 AC_OUTPUT
 
+if test "x$odeint_fallback" = "xyes"; then
+  echo "================================"
+  echo "Could not find odeint library, "
+  echo "falling back on builtin version."
+  echo "================================"
+fi
