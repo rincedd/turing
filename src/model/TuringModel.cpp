@@ -1,9 +1,7 @@
 #include "TuringModel.h"
 #include <largenet2.h>
 #include <cassert>
-#include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector_proxy.hpp>
-#include <boost/numeric/ublas/matrix_proxy.hpp>
 #include <cmath>
 
 using namespace largenet;
@@ -74,22 +72,19 @@ double TuringModel::patternAmplitude() const
 	return sqrt(a);
 }
 
-void TuringModel::operator ()(const double x, ode::dvector& y,
-		ode::dvector& dydx)
+void TuringModel::operator ()(const ode::dvector& y, ode::dvector& dydx,
+		const double x)
 {
 	size_t K = y.size() / 2;
 	for (size_t i = 0; i < K; ++i)
 	{
-		bnu::matrix_row<largenet::measures::sparse_dmatrix_t> lr(laplacian_, i);
-		double activator_diffusion = bnu::inner_prod(lr, bnu::subrange(y, 0, K));
-		double inhibitor_diffusion = bnu::inner_prod(lr, bnu::subrange(y, K, y.size()));
-//		double activator_diffusion = 0;
-//		double inhibitor_diffusion = 0;
-//		for (size_t j = 0; j < K; ++j)
-//		{
-//			activator_diffusion -= laplacian_(i, j) * y[j];
-//			inhibitor_diffusion -= laplacian_(i, j) * y[j + K];
-//		}
+		double activator_diffusion = 0;
+		double inhibitor_diffusion = 0;
+		for (size_t j = 0; j < K; ++j)
+		{
+			activator_diffusion -= laplacian_(i, j) * y[j];
+			inhibitor_diffusion -= laplacian_(i, j) * y[j + K];
+		}
 		dydx[i] = activator_coupling_(y[i], y[i + K])
 				+ par_.activator_d * activator_diffusion;
 		dydx[i + K] = inhibitor_coupling_(y[i], y[i + K])

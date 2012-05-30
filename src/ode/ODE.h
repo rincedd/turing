@@ -25,7 +25,13 @@ public:
 	ODE() {}
 	virtual ~ODE() {}
 	virtual size_type dim() const = 0;
-	virtual void operator()(const double x, dvector& y, dvector& dydx) = 0;
+	/**
+	 * Right-hand side of the ODE, in odeint signature
+	 * @param[in] y current state vector
+	 * @param[out] dydx computed change in state vector
+	 * @param[in] x current value of independent variable
+	 */
+	virtual void operator()(const dvector& y, dvector& dydx, const double x) = 0;
 };
 
 } /* namespace ode */

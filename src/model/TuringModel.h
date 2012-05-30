@@ -41,7 +41,7 @@ public:
 	void initialize(const ode::dvector& activator,
 			const ode::dvector& inhibitor);
 
-	void operator()(const double x, ode::dvector& y, ode::dvector& dydx);
+	void operator()(const ode::dvector& y, ode::dvector& dydx, const double x);
 
 	ode::dvector activator() const;
 	ode::dvector inhibitor() const;
