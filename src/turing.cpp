@@ -1,6 +1,8 @@
 #include <largenet2.h>
 #include <largenet2/generators/generators.h>
+
 #include <cassert>
+#include <iostream>
 
 #include "model/TuringModel.h"
 #include "myrng1.3/myrng.h"
@@ -47,7 +49,7 @@ int main(int argc, char **argv)
 			<< 2.0 * net.numberOfEdges() / net.numberOfNodes() << ").\n";
 
 	TuringModel::Params p =
-	{ 0.12, 14 };
+	{ 0.12, 10 };
 	TuringModel m(net, p, f, g);
 
 	double t = 0;
@@ -56,13 +58,16 @@ int main(int argc, char **argv)
 		m.concentrations()[i] = rng.GaussianPolar(0, 1e-8);
 	}
 
-	typedef bno::runge_kutta_cash_karp54<ode::dvector> error_stepper_t;
-	//bno::runge_kutta4<ode::dvector> stepper = bno::runge_kutta4<ode::dvector>();
+	typedef bno::runge_kutta_dopri5<ode::dvector> error_stepper_t;
 	bno::result_of::make_controlled<error_stepper_t>::type stepper =
-			bno::make_controlled(1e-4, 1e-3, error_stepper_t());
+			bno::make_controlled(1e-3, 1e-2, error_stepper_t());
+//	bno::runge_kutta4<ode::dvector> stepper = bno::runge_kutta4<ode::dvector>();
+//	bno::adams_bashforth_moulton<5, ode::dvector> stepper = bno::adams_bashforth_moulton<5, ode::dvector>();
 
 	Output out(m);
-	bno::integrate_const(stepper, m, m.concentrations(), 0.0, 20.0, 0.5, out);
+	size_t n_steps = bno::integrate_const(stepper, m, m.concentrations(), 0.0, 10.0, 0.5, out);
+
+	std::cout << "Integration took " << n_steps << " steps.\n";
 
 	return 0;
 }
