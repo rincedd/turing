@@ -3,8 +3,6 @@
 #include <cassert>
 
 #include "model/TuringModel.h"
-#include "ode/RK4Stepper.h"
-
 #include "myrng1.3/myrng.h"
 
 #include <boost/numeric/odeint.hpp>
@@ -43,26 +41,28 @@ int main(int argc, char **argv)
 {
 	Graph net(1, 1);
 	myrng::WELL1024a rng;
-	generators::randomBA(net, 100, 15, rng);
+	generators::randomBA(net, 1000, 10, rng);
 	std::cout << "BA network with N = " << net.numberOfNodes() << " and L = "
 			<< net.numberOfEdges() << " (<k> = "
 			<< 2.0 * net.numberOfEdges() / net.numberOfNodes() << ").\n";
 
 	TuringModel::Params p =
-	{ 0.12, 12 };
+	{ 0.12, 14 };
 	TuringModel m(net, p, f, g);
 
 	double t = 0;
 	for (ode::ODE::size_type i = 0; i < m.dim(); ++i)
 	{
-		m.concentrations()[i] = rng.GaussianPolar(0, 0.001);
+		m.concentrations()[i] = rng.GaussianPolar(0, 1e-8);
 	}
 
-	typedef bno::runge_kutta_dopri5<ode::dvector> stepper_t;
+	typedef bno::runge_kutta_cash_karp54<ode::dvector> error_stepper_t;
+	//bno::runge_kutta4<ode::dvector> stepper = bno::runge_kutta4<ode::dvector>();
+	bno::result_of::make_controlled<error_stepper_t>::type stepper =
+			bno::make_controlled(1e-4, 1e-3, error_stepper_t());
 
 	Output out(m);
-	bno::integrate_const(bno::make_controlled(1e-4, 1e-4, stepper_t()), m,
-			m.concentrations(), 0.0, 20.0, 1.0, out);
+	bno::integrate_const(stepper, m, m.concentrations(), 0.0, 20.0, 0.5, out);
 
 	return 0;
 }
