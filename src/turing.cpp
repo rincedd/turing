@@ -92,15 +92,18 @@ int main(int argc, char **argv)
 						opts.params().inhibitor_var));
 	}
 
-	typedef bno::runge_kutta_dopri5<TuringModel::state_type> error_stepper_t;
+	typedef bno::runge_kutta_dopri5<TuringModel::state_type,
+			TuringModel::time_type, TuringModel::state_type,
+			TuringModel::time_type, bno::vector_space_algebra> error_stepper_t;
+//	typedef bno::runge_kutta_dopri5<TuringModel::state_type> error_stepper_t;
 	bno::result_of::make_controlled<error_stepper_t>::type stepper =
 			bno::make_controlled(1e-3, 1e-2, error_stepper_t());
 //	bno::runge_kutta4<TuringModel::state_type> stepper = bno::runge_kutta4<TuringModel::state_type>();
 //	bno::adams_bashforth_moulton<5, TuringModel::state_type> stepper = bno::adams_bashforth_moulton<5, TuringModel::state_type>();
 
 	Output out(m, opts.params().integration_timestep);
-	size_t n_steps = bno::integrate_adaptive(stepper, m, m.concentrations(), 0.0,
-			10.0, opts.params().integration_timestep, out);
+	size_t n_steps = bno::integrate_adaptive(stepper, m, m.concentrations(),
+			0.0, 10.0, opts.params().integration_timestep, out);
 
 	std::cout << "Integration took " << n_steps << " steps.\n";
 

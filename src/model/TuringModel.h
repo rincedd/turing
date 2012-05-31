@@ -12,7 +12,9 @@
 
 #include "../ode/ODE.h"
 
-class TuringModel: public ode::ODE<std::vector<double>, double>
+#include "../mtl_bindings.hpp"
+
+class TuringModel: public ode::ODE<mtl::dense_vector<double>, double>
 {
 public:
 	typedef boost::function<double(double u, double v)> coupling_function_t;
@@ -47,7 +49,7 @@ private:
 	Params par_;
 	coupling_function_t activator_coupling_, inhibitor_coupling_;
 	state_type concentrations_; //< activator and inhibitor concentrations
-	largenet::measures::sparse_dmatrix_t laplacian_;
+	mtl::compressed2D<double> laplacian_;
 };
 
 #endif /* TURINGMODEL_H_ */
