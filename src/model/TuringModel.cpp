@@ -2,7 +2,6 @@
 #include <cmath>
 
 using namespace largenet;
-namespace bnu = boost::numeric::ublas;
 
 TuringModel::TuringModel(Graph& g, Params p,
 		coupling_function_t activator_coupling,
