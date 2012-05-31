@@ -4,6 +4,8 @@ bin_PROGRAMS = turing
 
 turing_SOURCES = \
 	src/turing.cpp \
+	src/TuringOptions.cpp \
+	src/TuringOptions.h \
 	src/ode/ODE.h \
 	src/model/TuringModel.h \
 	src/model/TuringModel.cpp \
@@ -22,4 +24,5 @@ ODEINT_CXXFLAGS =
 endif	
 
 turing_CXXFLAGS = $(AM_CXXFLAGS) $(ODEINT_CXXFLAGS) $(BOOST_CXXFLAGS) $(DEPS_CFLAGS)
-turing_LDADD = $(DEPS_LIBS)
+turing_LDFLAGS = $(DEPS_LDFLAGS) $(BOOST_PROGRAM_OPTIONS_LDFLAGS)
+turing_LDADD = $(DEPS_LIBS) $(BOOST_PROGRAM_OPTIONS_LIBS)

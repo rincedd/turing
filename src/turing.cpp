@@ -2,8 +2,10 @@
 #include <largenet2/generators/generators.h>
 
 #include <cassert>
+#include <cmath>
 #include <iostream>
 
+#include "TuringOptions.h"
 #include "model/TuringModel.h"
 #include "myrng1.3/myrng.h"
 
@@ -27,36 +29,67 @@ double g(double u, double v)
 class Output
 {
 public:
-	Output(const TuringModel& model) :
-			model_(model)
+	Output(const TuringModel& model, TuringModel::time_type interval) :
+			model_(model), interval_(interval), next_(0)
 	{
 	}
 	void operator()(const TuringModel::state_type& state,
 			const TuringModel::time_type t)
 	{
-		std::cout << t << "\t" << model_.patternAmplitude() << "\n";
+		if (t >= next_)
+		{
+			std::cout << t << "\t" << model_.patternAmplitude() << "\n";
+			next_ += interval_;
+		}
 	}
 private:
 	const TuringModel& model_;
+	TuringModel::time_type interval_, next_;
 };
 
 int main(int argc, char **argv)
 {
+	TuringOptions opts;
+	try
+	{
+		opts.parseCommandLine(argc, argv);
+	} catch (TuringOptions::UsageError& e)
+	{
+		opts.printHelpText(std::cout);
+		exit(0);
+	} catch (TuringOptions::ParsingError& e)
+	{
+		std::cerr << e.what() << "\n";
+		exit(1);
+	}
+
 	Graph net(1, 1);
 	myrng::WELL1024a rng;
-	generators::randomBA(net, 1000, 10, rng);
-	std::cout << "BA network with N = " << net.numberOfNodes() << " and L = "
-			<< net.numberOfEdges() << " (<k> = "
-			<< 2.0 * net.numberOfEdges() / net.numberOfNodes() << ").\n";
+	generators::randomGnm(net, opts.params().num_nodes,
+			opts.params().average_degree * opts.params().num_nodes / 2, rng,
+			false);
+	//generators::randomBA(net, opts.params().num_nodes, opts.params().average_degree / 2, rng);
+	std::cout << "# ER network with N = ";
+	//std::cout << "# BA network with N = ";
+	std::cout << net.numberOfNodes() << " and L = " << net.numberOfEdges()
+			<< " (<k> = " << 2.0 * net.numberOfEdges() / net.numberOfNodes()
+			<< ").\n";
 
 	TuringModel::Params p =
-	{ 0.12, 10 };
+	{ opts.params().activator_diffusion,
+			opts.params().diffusion_ratio_inhibitor_activator };
 	TuringModel m(net, p, f, g);
 
 	double t = 0;
-	for (size_t i = 0; i < m.dim(); ++i)
+	size_t K = m.dim() / 2;
+	for (size_t i = 0; i < K; ++i)
 	{
-		m.concentrations()[i] = rng.GaussianPolar(0, 1e-8);
+		m.concentrations()[i] = fabs(
+				rng.GaussianPolar(opts.params().activator_mean,
+						opts.params().activator_var));
+		m.concentrations()[i + K] = fabs(
+				rng.GaussianPolar(opts.params().inhibitor_mean,
+						opts.params().inhibitor_var));
 	}
 
 	typedef bno::runge_kutta_dopri5<TuringModel::state_type> error_stepper_t;
@@ -65,9 +98,9 @@ int main(int argc, char **argv)
 //	bno::runge_kutta4<TuringModel::state_type> stepper = bno::runge_kutta4<TuringModel::state_type>();
 //	bno::adams_bashforth_moulton<5, TuringModel::state_type> stepper = bno::adams_bashforth_moulton<5, TuringModel::state_type>();
 
-	Output out(m);
-	size_t n_steps = bno::integrate_const(stepper, m, m.concentrations(), 0.0,
-			10.0, 0.5, out);
+	Output out(m, opts.params().integration_timestep);
+	size_t n_steps = bno::integrate_adaptive(stepper, m, m.concentrations(), 0.0,
+			10.0, opts.params().integration_timestep, out);
 
 	std::cout << "Integration took " << n_steps << " steps.\n";
 

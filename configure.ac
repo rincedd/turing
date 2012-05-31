@@ -3,6 +3,8 @@ AC_INIT(turing, 1.0)
 AC_CANONICAL_SYSTEM
 
 AM_INIT_AUTOMAKE([1.11 -Wall -Werror foreign silent-rules subdir-objects])
+LT_PREREQ([2.2])
+LT_INIT([disable-static])
 
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -14,6 +16,7 @@ AC_PROG_INSTALL
 AC_PROG_TRY_DOXYGEN
 BOOST_REQUIRE([1.36.0])
 BOOST_FOREACH
+BOOST_PROGRAM_OPTIONS
 
 # configure option --with-builtin-odeint [=yes]
 AC_ARG_WITH([builtin-odeint], 
