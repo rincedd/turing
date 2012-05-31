@@ -10,6 +10,7 @@
 #include "myrng1.3/myrng.h"
 
 #include <boost/numeric/odeint.hpp>
+#include "ublas_bindings.h"
 
 using namespace largenet;
 namespace bno = boost::numeric::odeint;

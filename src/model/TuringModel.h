@@ -10,11 +10,12 @@
 #include <largenet2/measures/spectrum.h>
 #include <boost/function.hpp>
 
+#include <boost/numeric/ublas/vector.hpp>
+#include <boost/numeric/ublas/matrix_sparse.hpp>
+
 #include "../ode/ODE.h"
 
-#include "../mtl_bindings.hpp"
-
-class TuringModel: public ode::ODE<mtl::dense_vector<double>, double>
+class TuringModel: public ode::ODE<boost::numeric::ublas::vector<double>, double>
 {
 public:
 	typedef boost::function<double(double u, double v)> coupling_function_t;
@@ -49,7 +50,7 @@ private:
 	Params par_;
 	coupling_function_t activator_coupling_, inhibitor_coupling_;
 	state_type concentrations_; //< activator and inhibitor concentrations
-	mtl::compressed2D<double> laplacian_;
+	boost::numeric::ublas::mapped_matrix<double> laplacian_;
 };
 
 #endif /* TURINGMODEL_H_ */

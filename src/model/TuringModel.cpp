@@ -19,7 +19,7 @@ TuringModel::~TuringModel()
 
 void TuringModel::recomputeLaplacian()
 {
-	//laplacian_ = measures::laplacian(graph_);
+	laplacian_ = measures::laplacian(graph_);
 }
 
 const TuringModel::state_type& TuringModel::concentrations() const
