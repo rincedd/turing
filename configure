@@ -618,8 +618,6 @@ DEPS_CFLAGS
 PKG_CONFIG_LIBDIR
 PKG_CONFIG_PATH
 PKG_CONFIG
-USE_BUILTIN_MTL_FALSE
-USE_BUILTIN_MTL_TRUE
 USE_BUILTIN_ODEINT_FALSE
 USE_BUILTIN_ODEINT_TRUE
 BOOST_PROGRAM_OPTIONS_LIBS
@@ -768,7 +766,6 @@ enable_libtool_lock
 with_boost
 enable_static_boost
 with_builtin_odeint
-with_builtin_mtl
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1432,7 +1429,6 @@ Optional Packages:
                         (or the compiler's sysroot if not specified).
   --with-boost=DIR        prefix of Boost 1.36.0 [guess]
   --with-builtin-odeint   Use builtin odeint library (default=yes)
-  --with-builtin-mtl      Use builtin MTL library (default=yes)
 
 Some influential environment variables:
   CC          C compiler command
@@ -15788,56 +15784,6 @@ else
 fi
 
 
-# configure option --with-builtin-mtl [=yes]
-
-# Check whether --with-builtin-mtl was given.
-if test "${with_builtin_mtl+set}" = set; then :
-  withval=$with_builtin_mtl; mymtl="$withval"
-else
-  mymtl=yes
-fi
-
-
-if test "x$mymtl" = xno; then
-  if test x"$boost_cv_inc_path" = xno; then
-  mtl_fallback=yes; mymtl=yes
-else
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-boost_save_CPPFLAGS=$CPPFLAGS
-CPPFLAGS="$CPPFLAGS $BOOST_CPPFLAGS"
-ac_fn_cxx_check_header_mongrel "$LINENO" "boost/numeric/mtl/mtl.hpp" "ac_cv_header_boost_numeric_mtl_mtl_hpp" "$ac_includes_default"
-if test "x$ac_cv_header_boost_numeric_mtl_mtl_hpp" = xyes; then :
-
-$as_echo "#define HAVE_BOOST_NUMERIC_MTL_MTL_HPP 1" >>confdefs.h
-
-else
-  mtl_fallback=yes; mymtl=yes
-fi
-
-
-CPPFLAGS=$boost_save_CPPFLAGS
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-fi
-
-fi
-
- if test "x$mymtl" = "xyes"; then
-  USE_BUILTIN_MTL_TRUE=
-  USE_BUILTIN_MTL_FALSE='#'
-else
-  USE_BUILTIN_MTL_TRUE='#'
-  USE_BUILTIN_MTL_FALSE=
-fi
-
-
 
 
 
@@ -16191,10 +16137,6 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${USE_BUILTIN_ODEINT_TRUE}" && test -z "${USE_BUILTIN_ODEINT_FALSE}"; then
   as_fn_error $? "conditional \"USE_BUILTIN_ODEINT\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${USE_BUILTIN_MTL_TRUE}" && test -z "${USE_BUILTIN_MTL_FALSE}"; then
-  as_fn_error $? "conditional \"USE_BUILTIN_MTL\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 
@@ -18709,13 +18651,6 @@ fi
 if test "x$odeint_fallback" = "xyes"; then
   echo "================================"
   echo "Could not find odeint library, "
-  echo "falling back on builtin version."
-  echo "================================"
-fi
-
-if test "x$mtl_fallback" = "xyes"; then
-  echo "================================"
-  echo "Could not find MTL library, "
   echo "falling back on builtin version."
   echo "================================"
 fi

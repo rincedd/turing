@@ -6,9 +6,6 @@
 /* Define to 1 if you have <boost/foreach.hpp> */
 #undef HAVE_BOOST_FOREACH_HPP
 
-/* Define to 1 if you have <boost/numeric/mtl/mtl.hpp> */
-#undef HAVE_BOOST_NUMERIC_MTL_MTL_HPP
-
 /* Define to 1 if you have <boost/numeric/odeint.hpp> */
 #undef HAVE_BOOST_NUMERIC_ODEINT_HPP
 

@@ -275,7 +275,7 @@ turing_SOURCES = \
 	src/TuringOptions.cpp \
 	src/TuringOptions.h \
 	src/ode/ODE.h \
-	src/mtl_binding.hpp \
+	src/ublas_bindings.h \
 	src/model/TuringModel.h \
 	src/model/TuringModel.cpp \
 	src/myrng1.3/MTEngine.cpp \
@@ -288,9 +288,7 @@ turing_SOURCES = \
 
 @USE_BUILTIN_ODEINT_FALSE@ODEINT_CXXFLAGS = 
 @USE_BUILTIN_ODEINT_TRUE@ODEINT_CXXFLAGS = -I ${srcdir}/odeint
-@USE_BUILTIN_MTL_FALSE@MTL_CXXFLAGS = 
-@USE_BUILTIN_MTL_TRUE@MTL_CXXFLAGS = -I ${srcdir}/mtl
-turing_CXXFLAGS = $(AM_CXXFLAGS) $(ODEINT_CXXFLAGS) $(BOOST_CXXFLAGS) $(MTL_CXXFLAGS) $(DEPS_CFLAGS)
+turing_CXXFLAGS = $(AM_CXXFLAGS) $(ODEINT_CXXFLAGS) $(BOOST_CXXFLAGS) $(DEPS_CFLAGS)
 turing_LDFLAGS = $(DEPS_LDFLAGS) $(BOOST_PROGRAM_OPTIONS_LDFLAGS)
 turing_LDADD = $(DEPS_LIBS) $(BOOST_PROGRAM_OPTIONS_LIBS)
 all: config.h

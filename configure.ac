@@ -30,18 +30,6 @@ fi
 
 AM_CONDITIONAL([USE_BUILTIN_ODEINT], [test "x$myodeint" = "xyes"])
 
-# configure option --with-builtin-mtl [=yes]
-AC_ARG_WITH([builtin-mtl], 
-			[AS_HELP_STRING([--with-builtin-mtl], [Use builtin MTL library (default=yes)])], 
-			[mymtl="$withval"], 
-			[mymtl=yes])
-
-if test "x$mymtl" = xno; then
-  BOOST_FIND_HEADER([boost/numeric/mtl/mtl.hpp], [mtl_fallback=yes; mymtl=yes])
-fi
-
-AM_CONDITIONAL([USE_BUILTIN_MTL], [test "x$mymtl" = "xyes"])
-
 PKG_PROG_PKG_CONFIG
 PKG_CHECK_MODULES([DEPS], [largenet2 >= 0.3])
  
@@ -58,13 +46,6 @@ AC_OUTPUT
 if test "x$odeint_fallback" = "xyes"; then
   echo "================================"
   echo "Could not find odeint library, "
-  echo "falling back on builtin version."
-  echo "================================"
-fi
-
-if test "x$mtl_fallback" = "xyes"; then
-  echo "================================"
-  echo "Could not find MTL library, "
   echo "falling back on builtin version."
   echo "================================"
 fi
