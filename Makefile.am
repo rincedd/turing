@@ -7,7 +7,6 @@ turing_SOURCES = \
 	src/TuringOptions.cpp \
 	src/TuringOptions.h \
 	src/ode/ODE.h \
-	src/ublas_bindings.h \
 	src/model/TuringModel.h \
 	src/model/TuringModel.cpp \
 	src/myrng1.3/MTEngine.cpp \
