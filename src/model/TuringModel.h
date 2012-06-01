@@ -7,7 +7,6 @@
 #define TURINGMODEL_H_
 
 #include <largenet2.h>
-#include <largenet2/measures/spectrum.h>
 #include <boost/function.hpp>
 
 #include <boost/numeric/ublas/vector.hpp>
@@ -18,6 +17,7 @@
 class TuringModel: public ode::ODE<boost::numeric::ublas::vector<double>, double>
 {
 public:
+	typedef boost::numeric::ublas::compressed_matrix<double> laplacian_matrix_t;
 	typedef boost::function<double(double u, double v)> coupling_function_t;
 	struct Params
 	{
@@ -50,7 +50,7 @@ private:
 	Params par_;
 	coupling_function_t activator_coupling_, inhibitor_coupling_;
 	state_type concentrations_; //< activator and inhibitor concentrations
-	boost::numeric::ublas::mapped_matrix<double> laplacian_;
+	laplacian_matrix_t laplacian_;
 };
 
 #endif /* TURINGMODEL_H_ */
