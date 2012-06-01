@@ -95,7 +95,8 @@ int main(int argc, char **argv)
 	typedef bno::runge_kutta_dopri5<TuringModel::state_type> error_stepper_t;
 	typedef bno::result_of::make_controlled<error_stepper_t>::type stepper_t;
 
-	stepper_t stepper = bno::make_controlled<error_stepper_t>(1e-3, 1e-2);
+	stepper_t stepper = bno::make_controlled<error_stepper_t>(
+			opts.params().atol, opts.params().rtol);
 
 	Output out(m, opts.params().integration_timestep);
 	size_t n_steps = bno::integrate_adaptive(stepper, m, m.concentrations(),
