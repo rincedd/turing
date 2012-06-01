@@ -5,12 +5,11 @@
 #include <cmath>
 #include <iostream>
 
+#include <boost/numeric/odeint.hpp>
+
 #include "TuringOptions.h"
 #include "model/TuringModel.h"
 #include "myrng1.3/myrng.h"
-
-#include <boost/numeric/odeint.hpp>
-#include "ublas_bindings.h"
 
 using namespace largenet;
 namespace bno = boost::numeric::odeint;
@@ -93,14 +92,10 @@ int main(int argc, char **argv)
 						opts.params().inhibitor_var));
 	}
 
-	typedef bno::runge_kutta_dopri5<TuringModel::state_type,
-			TuringModel::time_type, TuringModel::state_type,
-			TuringModel::time_type, bno::vector_space_algebra> error_stepper_t;
-//	typedef bno::runge_kutta_dopri5<TuringModel::state_type> error_stepper_t;
-	bno::result_of::make_controlled<error_stepper_t>::type stepper =
-			bno::make_controlled(1e-3, 1e-2, error_stepper_t());
-//	bno::runge_kutta4<TuringModel::state_type> stepper = bno::runge_kutta4<TuringModel::state_type>();
-//	bno::adams_bashforth_moulton<5, TuringModel::state_type> stepper = bno::adams_bashforth_moulton<5, TuringModel::state_type>();
+	typedef bno::runge_kutta_dopri5<TuringModel::state_type> error_stepper_t;
+	typedef bno::result_of::make_controlled<error_stepper_t>::type stepper_t;
+
+	stepper_t stepper = bno::make_controlled<error_stepper_t>(1e-3, 1e-2);
 
 	Output out(m, opts.params().integration_timestep);
 	size_t n_steps = bno::integrate_adaptive(stepper, m, m.concentrations(),
