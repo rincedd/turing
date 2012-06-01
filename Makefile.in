@@ -36,6 +36,7 @@ build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
 bin_PROGRAMS = turing$(EXEEXT)
+@DEBUGMODE_FALSE@am__append_1 = -DNDEBUG
 subdir = .
 DIST_COMMON = $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
@@ -288,7 +289,8 @@ turing_SOURCES = \
 
 @USE_BUILTIN_ODEINT_FALSE@ODEINT_CXXFLAGS = 
 @USE_BUILTIN_ODEINT_TRUE@ODEINT_CXXFLAGS = -I ${srcdir}/odeint
-turing_CXXFLAGS = $(AM_CXXFLAGS) $(ODEINT_CXXFLAGS) $(BOOST_CXXFLAGS) $(DEPS_CFLAGS)
+turing_CXXFLAGS = $(AM_CXXFLAGS) $(ODEINT_CXXFLAGS) $(BOOST_CXXFLAGS) \
+	$(DEPS_CFLAGS) $(am__append_1)
 turing_LDFLAGS = $(DEPS_LDFLAGS) $(BOOST_PROGRAM_OPTIONS_LDFLAGS)
 turing_LDADD = $(DEPS_LIBS) $(BOOST_PROGRAM_OPTIONS_LIBS)
 all: config.h

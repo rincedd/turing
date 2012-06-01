@@ -18,6 +18,16 @@ BOOST_REQUIRE([1.36.0])
 BOOST_FOREACH
 BOOST_PROGRAM_OPTIONS
 
+# configure option --enable-debug [=no]
+AC_ARG_ENABLE([debug],
+			   [AS_HELP_STRING([--enable-debug], [Enable debug mode (default=no)])],
+			   [debug="$withval"],
+			   [debug=no])
+
+if test "x$debug" = xno; then
+  AM_CONDITIONAL([DEBUGMODE], [test "x$debug" = "xyes"])
+fi
+
 # configure option --with-builtin-odeint [=yes]
 AC_ARG_WITH([builtin-odeint], 
 			[AS_HELP_STRING([--with-builtin-odeint], [Use builtin odeint library (default=yes)])], 
