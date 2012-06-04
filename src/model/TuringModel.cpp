@@ -70,12 +70,10 @@ void TuringModel::operator ()(const state_type& y, state_type& dydx,
 		const time_type x)
 {
 	size_t K = dim() / 2;
-	state_type coupling(y.size());
 	for (size_t i = 0; i < K; ++i)
 	{
-		coupling[i] = activator_coupling_(y[i], y[i + K]);
-		coupling[i + K] = inhibitor_coupling_(y[i], y[i + K]);
+		dydx[i] = activator_coupling_(y[i], y[i + K]);
+		dydx[i + K] = inhibitor_coupling_(y[i], y[i + K]);
 	}
-	bnu::axpy_prod(laplacian_, y, dydx, true);
-	dydx.plus_assign(coupling);
+	bnu::axpy_prod(laplacian_, y, dydx, false);
 }
