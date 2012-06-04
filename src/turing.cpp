@@ -65,12 +65,13 @@ int main(int argc, char **argv)
 
 	Graph net(1, 1);
 	myrng::WELL1024a rng;
-	generators::randomGnm(net, opts.params().num_nodes,
-			opts.params().average_degree * opts.params().num_nodes / 2, rng,
-			false);
-	//generators::randomBA(net, opts.params().num_nodes, opts.params().average_degree / 2, rng);
-	std::cout << "# ER network with N = ";
-	//std::cout << "# BA network with N = ";
+//	generators::randomGnm(net, opts.params().num_nodes,
+//			opts.params().average_degree * opts.params().num_nodes / 2, rng,
+//			false);
+	generators::randomBA(net, opts.params().num_nodes,
+			opts.params().average_degree / 2, rng);
+	//std::cout << "# ER network with N = ";
+	std::cout << "# BA network with N = ";
 	std::cout << net.numberOfNodes() << " and L = " << net.numberOfEdges()
 			<< " (<k> = " << 2.0 * net.numberOfEdges() / net.numberOfNodes()
 			<< ").\n";
@@ -100,7 +101,8 @@ int main(int argc, char **argv)
 
 	Output out(m, opts.params().integration_timestep);
 	size_t n_steps = bno::integrate_adaptive(stepper, m, m.concentrations(),
-			0.0, 10.0, opts.params().integration_timestep, out);
+			0.0, opts.params().integration_time,
+			opts.params().integration_timestep, out);
 
 	std::cout << "Integration took " << n_steps << " steps.\n";
 

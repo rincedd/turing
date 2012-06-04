@@ -32,6 +32,7 @@ void TuringOptions::init()
 	simOpts.add_options()
 			("nodes,n", po::value<size_t>(&par_.num_nodes)->default_value(100), "Number of nodes.")
 			("avg-degree,k", po::value<double>(&par_.average_degree)->default_value(20), "Intended average degree of network.")
+			("integration-time", po::value<double>(&par_.integration_time)->default_value(20.0), "Integration time.")
 			("timestep", po::value<double>(&par_.integration_timestep)->default_value(0.5), "Integration time step.")
 			("atol", po::value<double>(&par_.atol)->default_value(1e-4), "Absolute error tolerance for integration.")
 			("rtol", po::value<double>(&par_.rtol)->default_value(1e-3), "Relative error tolerance for integration.");

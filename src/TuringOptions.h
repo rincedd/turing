@@ -22,6 +22,7 @@ struct TuringParameters
 	double average_degree;
 
 	double integration_timestep;
+	double integration_time;
 	double atol, rtol;
 };
 
