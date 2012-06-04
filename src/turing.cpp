@@ -38,7 +38,9 @@ public:
 	{
 		if (t >= next_)
 		{
-			std::cout << t << "\t" << model_.patternAmplitude() << "\n";
+			std::cout << t << "\t" << model_.patternAmplitude() << "\t"
+					<< model_.meanActivatorConcentration() << "\t"
+					<< model_.meanInhibitorConcentration() << "\n";
 			next_ += interval_;
 		}
 	}

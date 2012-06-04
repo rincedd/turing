@@ -44,6 +44,8 @@ public:
 	state_type& concentrations();
 
 	double patternAmplitude() const;
+	double meanActivatorConcentration() const;
+	double meanInhibitorConcentration() const;
 
 private:
 	largenet::Graph& graph_;

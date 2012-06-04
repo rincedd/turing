@@ -24,9 +24,9 @@ void TuringOptions::init()
 			("sigma,s", po::value<double>(&par_.diffusion_ratio_inhibitor_activator)->default_value(13), "Inhibitor to activator ratio of diffusion constants.");
 
 	iniOpts.add_options()
-			("initial-activator-mean", po::value<double>(&par_.activator_mean)->default_value(2), "Initial mean activator concentration.")
+			("initial-activator-mean", po::value<double>(&par_.activator_mean)->default_value(5), "Initial mean activator concentration.")
 			("initial-activator-var", po::value<double>(&par_.activator_var)->default_value(0.05), "Initial variance of activator concentration.")
-			("initial-inhibitor-mean", po::value<double>(&par_.inhibitor_mean)->default_value(2), "Initial mean inhibitor concentration.")
+			("initial-inhibitor-mean", po::value<double>(&par_.inhibitor_mean)->default_value(5), "Initial mean inhibitor concentration.")
 			("initial-inhibitor-var", po::value<double>(&par_.inhibitor_var)->default_value(0.05), "Initial variance of inhibitor concentration.");
 
 	simOpts.add_options()

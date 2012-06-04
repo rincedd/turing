@@ -2,6 +2,7 @@
 #include <cmath>
 #include <largenet2/measures/spectrum.h>
 #include <boost/numeric/ublas/matrix_proxy.hpp>
+#include <boost/numeric/ublas/vector_proxy.hpp>
 #include <boost/numeric/ublas/operation.hpp>
 
 using namespace largenet;
@@ -47,15 +48,9 @@ TuringModel::state_type& TuringModel::concentrations()
 
 double TuringModel::patternAmplitude() const
 {
-	double mean_act = 0, mean_inh = 0;
+	double mean_act = meanActivatorConcentration(), mean_inh =
+			meanInhibitorConcentration();
 	size_t K = dim() / 2;
-	for (size_t i = 0; i < K; ++i)
-	{
-		mean_act += concentrations_[i];
-		mean_inh += concentrations_[i + K];
-	}
-	mean_act /= K;
-	mean_inh /= K;
 	double a = 0;
 	for (size_t i = 0; i < K; ++i)
 	{
@@ -64,6 +59,20 @@ double TuringModel::patternAmplitude() const
 						* (concentrations_[i + K] - mean_inh);
 	}
 	return sqrt(a);
+}
+
+double TuringModel::meanActivatorConcentration() const
+{
+	return bnu::sum(
+			bnu::subrange(concentrations_, 0, concentrations_.size() / 2))
+			/ (0.5 * concentrations_.size());
+}
+
+double TuringModel::meanInhibitorConcentration() const
+{
+	return bnu::sum(
+			bnu::subrange(concentrations_, concentrations_.size() / 2,
+					concentrations_.size())) / (0.5 * concentrations_.size());
 }
 
 void TuringModel::operator ()(const state_type& y, state_type& dydx,
