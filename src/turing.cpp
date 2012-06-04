@@ -104,7 +104,5 @@ int main(int argc, char **argv)
 			0.0, opts.params().integration_time,
 			opts.params().integration_timestep, out);
 
-	std::cout << "Integration took " << n_steps << " steps.\n";
-
 	return 0;
 }
