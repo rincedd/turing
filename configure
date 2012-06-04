@@ -1431,7 +1431,7 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld [default=no]
   --with-sysroot=DIR Search for dependent libraries within DIR
                         (or the compiler's sysroot if not specified).
-  --with-boost=DIR        prefix of Boost 1.36.0 [guess]
+  --with-boost=DIR        prefix of Boost 1.43.0 [guess]
   --with-builtin-odeint   Use builtin odeint library (default=yes)
 
 Some influential environment variables:
@@ -15180,7 +15180,7 @@ done
 
 echo "$as_me: this is boost.m4 serial 16" >&5
 boost_save_IFS=$IFS
-boost_version_req=1.36.0
+boost_version_req=1.43.0
 IFS=.
 set x $boost_version_req 0 0 0
 IFS=$boost_save_IFS
