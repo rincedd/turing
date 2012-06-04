@@ -8,8 +8,10 @@
 #include <boost/numeric/odeint.hpp>
 
 #include "TuringOptions.h"
+#include "model/types.h"
 #include "model/TuringModel.h"
 #include "myrng1.3/myrng.h"
+#include "model/ConcentrationDifference.h"
 
 using namespace largenet;
 namespace bno = boost::numeric::odeint;
@@ -29,24 +31,31 @@ double g(double u, double v)
 class Output
 {
 public:
-	Output(const TuringModel& model, TuringModel::time_type interval) :
-			model_(model), interval_(interval), next_(0)
+	Output(const TuringModel& model, time_value_t interval) :
+			model_(model), c_diff_(model.graph(), model.concentrations()), interval_(
+					interval), next_(0)
 	{
 	}
-	void operator()(const TuringModel::state_type& state,
-			const TuringModel::time_type t)
+	void writeHeader()
+	{
+		std::cout << "#t\tA\t<u>\t<v>\t<c_ij>\n";
+	}
+	void operator()(const state_vector_t& state, const time_value_t t)
 	{
 		if (t >= next_)
 		{
+			c_diff_.update();
 			std::cout << t << "\t" << model_.patternAmplitude() << "\t"
 					<< model_.meanActivatorConcentration() << "\t"
-					<< model_.meanInhibitorConcentration() << "\n";
+					<< model_.meanInhibitorConcentration() << "\t"
+					<< c_diff_.value() << "\n";
 			next_ += interval_;
 		}
 	}
 private:
 	const TuringModel& model_;
-	TuringModel::time_type interval_, next_;
+	ConcentrationDifference c_diff_;
+	time_value_t interval_, next_;
 };
 
 int main(int argc, char **argv)
@@ -95,13 +104,14 @@ int main(int argc, char **argv)
 						opts.params().inhibitor_var));
 	}
 
-	typedef bno::runge_kutta_dopri5<TuringModel::state_type> error_stepper_t;
+	typedef bno::runge_kutta_dopri5<state_vector_t> error_stepper_t;
 	typedef bno::result_of::make_controlled<error_stepper_t>::type stepper_t;
 
 	stepper_t stepper = bno::make_controlled<error_stepper_t>(
 			opts.params().atol, opts.params().rtol);
 
 	Output out(m, opts.params().integration_timestep);
+	out.writeHeader();
 	size_t n_steps = bno::integrate_adaptive(stepper, m, m.concentrations(),
 			0.0, opts.params().integration_time,
 			opts.params().integration_timestep, out);

@@ -9,12 +9,12 @@
 #include <largenet2.h>
 #include <boost/function.hpp>
 
-#include <boost/numeric/ublas/vector.hpp>
-#include <boost/numeric/ublas/matrix_sparse.hpp>
-
+#include "types.h"
 #include "../ode/ODE.h"
 
-class TuringModel: public ode::ODE<boost::numeric::ublas::vector<double>, double>
+#include <boost/numeric/ublas/matrix_sparse.hpp>
+
+class TuringModel: public ode::ODE<state_vector_t, time_value_t>
 {
 public:
 	typedef boost::numeric::ublas::compressed_matrix<double> laplacian_matrix_t;
@@ -42,6 +42,8 @@ public:
 
 	const state_type& concentrations() const;
 	state_type& concentrations();
+
+	const largenet::Graph& graph() const { return graph_; }
 
 	double patternAmplitude() const;
 	double meanActivatorConcentration() const;

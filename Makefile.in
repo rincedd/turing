@@ -62,6 +62,7 @@ am__dirstamp = $(am__leading_dot)dirstamp
 am_turing_OBJECTS = src/turing-turing.$(OBJEXT) \
 	src/turing-TuringOptions.$(OBJEXT) \
 	src/model/turing-TuringModel.$(OBJEXT) \
+	src/model/turing-ConcentrationDifference.$(OBJEXT) \
 	src/myrng1.3/turing-MTEngine.$(OBJEXT) \
 	src/myrng1.3/turing-WELLEngine.$(OBJEXT)
 turing_OBJECTS = $(am_turing_OBJECTS)
@@ -278,6 +279,9 @@ turing_SOURCES = \
 	src/ode/ODE.h \
 	src/model/TuringModel.h \
 	src/model/TuringModel.cpp \
+	src/model/OrderParameter.h \
+	src/model/ConcentrationDifference.h \
+	src/model/ConcentrationDifference.cpp \
 	src/myrng1.3/MTEngine.cpp \
 	src/myrng1.3/MTEngine.h \
 	src/myrng1.3/myrng.h \
@@ -407,6 +411,8 @@ src/model/$(DEPDIR)/$(am__dirstamp):
 	@: > src/model/$(DEPDIR)/$(am__dirstamp)
 src/model/turing-TuringModel.$(OBJEXT): src/model/$(am__dirstamp) \
 	src/model/$(DEPDIR)/$(am__dirstamp)
+src/model/turing-ConcentrationDifference.$(OBJEXT):  \
+	src/model/$(am__dirstamp) src/model/$(DEPDIR)/$(am__dirstamp)
 src/myrng1.3/$(am__dirstamp):
 	@$(MKDIR_P) src/myrng1.3
 	@: > src/myrng1.3/$(am__dirstamp)
@@ -424,6 +430,7 @@ turing$(EXEEXT): $(turing_OBJECTS) $(turing_DEPENDENCIES) $(EXTRA_turing_DEPENDE
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f src/model/turing-ConcentrationDifference.$(OBJEXT)
 	-rm -f src/model/turing-TuringModel.$(OBJEXT)
 	-rm -f src/myrng1.3/turing-MTEngine.$(OBJEXT)
 	-rm -f src/myrng1.3/turing-WELLEngine.$(OBJEXT)
@@ -435,6 +442,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/turing-TuringOptions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/turing-turing.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-ConcentrationDifference.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-TuringModel.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/myrng1.3/$(DEPDIR)/turing-MTEngine.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/myrng1.3/$(DEPDIR)/turing-WELLEngine.Po@am__quote@
@@ -504,6 +512,20 @@ src/model/turing-TuringModel.obj: src/model/TuringModel.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/model/TuringModel.cpp' object='src/model/turing-TuringModel.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/model/turing-TuringModel.obj `if test -f 'src/model/TuringModel.cpp'; then $(CYGPATH_W) 'src/model/TuringModel.cpp'; else $(CYGPATH_W) '$(srcdir)/src/model/TuringModel.cpp'; fi`
+
+src/model/turing-ConcentrationDifference.o: src/model/ConcentrationDifference.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/model/turing-ConcentrationDifference.o -MD -MP -MF src/model/$(DEPDIR)/turing-ConcentrationDifference.Tpo -c -o src/model/turing-ConcentrationDifference.o `test -f 'src/model/ConcentrationDifference.cpp' || echo '$(srcdir)/'`src/model/ConcentrationDifference.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/model/$(DEPDIR)/turing-ConcentrationDifference.Tpo src/model/$(DEPDIR)/turing-ConcentrationDifference.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/model/ConcentrationDifference.cpp' object='src/model/turing-ConcentrationDifference.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/model/turing-ConcentrationDifference.o `test -f 'src/model/ConcentrationDifference.cpp' || echo '$(srcdir)/'`src/model/ConcentrationDifference.cpp
+
+src/model/turing-ConcentrationDifference.obj: src/model/ConcentrationDifference.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/model/turing-ConcentrationDifference.obj -MD -MP -MF src/model/$(DEPDIR)/turing-ConcentrationDifference.Tpo -c -o src/model/turing-ConcentrationDifference.obj `if test -f 'src/model/ConcentrationDifference.cpp'; then $(CYGPATH_W) 'src/model/ConcentrationDifference.cpp'; else $(CYGPATH_W) '$(srcdir)/src/model/ConcentrationDifference.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/model/$(DEPDIR)/turing-ConcentrationDifference.Tpo src/model/$(DEPDIR)/turing-ConcentrationDifference.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/model/ConcentrationDifference.cpp' object='src/model/turing-ConcentrationDifference.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/model/turing-ConcentrationDifference.obj `if test -f 'src/model/ConcentrationDifference.cpp'; then $(CYGPATH_W) 'src/model/ConcentrationDifference.cpp'; else $(CYGPATH_W) '$(srcdir)/src/model/ConcentrationDifference.cpp'; fi`
 
 src/myrng1.3/turing-MTEngine.o: src/myrng1.3/MTEngine.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/myrng1.3/turing-MTEngine.o -MD -MP -MF src/myrng1.3/$(DEPDIR)/turing-MTEngine.Tpo -c -o src/myrng1.3/turing-MTEngine.o `test -f 'src/myrng1.3/MTEngine.cpp' || echo '$(srcdir)/'`src/myrng1.3/MTEngine.cpp
