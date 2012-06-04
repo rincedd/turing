@@ -26,7 +26,7 @@ void TuringOptions::init()
 	iniOpts.add_options()
 			("initial-activator-mean", po::value<double>(&par_.activator_mean)->default_value(5), "Initial mean activator concentration.")
 			("initial-activator-var", po::value<double>(&par_.activator_var)->default_value(0.05), "Initial variance of activator concentration.")
-			("initial-inhibitor-mean", po::value<double>(&par_.inhibitor_mean)->default_value(5), "Initial mean inhibitor concentration.")
+			("initial-inhibitor-mean", po::value<double>(&par_.inhibitor_mean)->default_value(10), "Initial mean inhibitor concentration.")
 			("initial-inhibitor-var", po::value<double>(&par_.inhibitor_var)->default_value(0.05), "Initial variance of inhibitor concentration.");
 
 	simOpts.add_options()
