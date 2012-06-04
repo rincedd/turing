@@ -61,6 +61,7 @@ PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
 am_turing_OBJECTS = src/turing-turing.$(OBJEXT) \
 	src/turing-TuringOptions.$(OBJEXT) \
+	src/turing-TuringApp.$(OBJEXT) \
 	src/model/turing-TuringModel.$(OBJEXT) \
 	src/model/turing-ConcentrationDifference.$(OBJEXT) \
 	src/myrng1.3/turing-MTEngine.$(OBJEXT) \
@@ -276,7 +277,12 @@ turing_SOURCES = \
 	src/turing.cpp \
 	src/TuringOptions.cpp \
 	src/TuringOptions.h \
+	src/TuringApp.h \
+	src/TuringApp.cpp \
 	src/ode/ODE.h \
+	src/ode/Integrator.h \
+	src/loggers/Logger.h \
+	src/loggers/AveragesLogger.h \
 	src/model/TuringModel.h \
 	src/model/TuringModel.cpp \
 	src/model/OrderParameter.h \
@@ -403,6 +409,8 @@ src/turing-turing.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
 src/turing-TuringOptions.$(OBJEXT): src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
+src/turing-TuringApp.$(OBJEXT): src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
 src/model/$(am__dirstamp):
 	@$(MKDIR_P) src/model
 	@: > src/model/$(am__dirstamp)
@@ -434,12 +442,14 @@ mostlyclean-compile:
 	-rm -f src/model/turing-TuringModel.$(OBJEXT)
 	-rm -f src/myrng1.3/turing-MTEngine.$(OBJEXT)
 	-rm -f src/myrng1.3/turing-WELLEngine.$(OBJEXT)
+	-rm -f src/turing-TuringApp.$(OBJEXT)
 	-rm -f src/turing-TuringOptions.$(OBJEXT)
 	-rm -f src/turing-turing.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/turing-TuringApp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/turing-TuringOptions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/turing-turing.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-ConcentrationDifference.Po@am__quote@
@@ -498,6 +508,20 @@ src/turing-TuringOptions.obj: src/TuringOptions.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/TuringOptions.cpp' object='src/turing-TuringOptions.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/turing-TuringOptions.obj `if test -f 'src/TuringOptions.cpp'; then $(CYGPATH_W) 'src/TuringOptions.cpp'; else $(CYGPATH_W) '$(srcdir)/src/TuringOptions.cpp'; fi`
+
+src/turing-TuringApp.o: src/TuringApp.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/turing-TuringApp.o -MD -MP -MF src/$(DEPDIR)/turing-TuringApp.Tpo -c -o src/turing-TuringApp.o `test -f 'src/TuringApp.cpp' || echo '$(srcdir)/'`src/TuringApp.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/turing-TuringApp.Tpo src/$(DEPDIR)/turing-TuringApp.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/TuringApp.cpp' object='src/turing-TuringApp.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/turing-TuringApp.o `test -f 'src/TuringApp.cpp' || echo '$(srcdir)/'`src/TuringApp.cpp
+
+src/turing-TuringApp.obj: src/TuringApp.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/turing-TuringApp.obj -MD -MP -MF src/$(DEPDIR)/turing-TuringApp.Tpo -c -o src/turing-TuringApp.obj `if test -f 'src/TuringApp.cpp'; then $(CYGPATH_W) 'src/TuringApp.cpp'; else $(CYGPATH_W) '$(srcdir)/src/TuringApp.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/$(DEPDIR)/turing-TuringApp.Tpo src/$(DEPDIR)/turing-TuringApp.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/TuringApp.cpp' object='src/turing-TuringApp.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/turing-TuringApp.obj `if test -f 'src/TuringApp.cpp'; then $(CYGPATH_W) 'src/TuringApp.cpp'; else $(CYGPATH_W) '$(srcdir)/src/TuringApp.cpp'; fi`
 
 src/model/turing-TuringModel.o: src/model/TuringModel.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/model/turing-TuringModel.o -MD -MP -MF src/model/$(DEPDIR)/turing-TuringModel.Tpo -c -o src/model/turing-TuringModel.o `test -f 'src/model/TuringModel.cpp' || echo '$(srcdir)/'`src/model/TuringModel.cpp

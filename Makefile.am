@@ -6,7 +6,12 @@ turing_SOURCES = \
 	src/turing.cpp \
 	src/TuringOptions.cpp \
 	src/TuringOptions.h \
+	src/TuringApp.h \
+	src/TuringApp.cpp \
 	src/ode/ODE.h \
+	src/ode/Integrator.h \
+	src/loggers/Logger.h \
+	src/loggers/AveragesLogger.h \
 	src/model/TuringModel.h \
 	src/model/TuringModel.cpp \
 	src/model/OrderParameter.h \
