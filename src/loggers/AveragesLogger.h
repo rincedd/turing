@@ -1,15 +1,15 @@
 #ifndef AVERAGESLOGGER_H_
 #define AVERAGESLOGGER_H_
 
-#include "../ode/ode_traits.h"
+#include "Logger.h"
 #include "../model/TuringModel.h"
 #include "../model/ConcentrationDifference.h"
 
-class AveragesLogger
+class AveragesLogger: public Logger<ode::ode_traits<TuringModel>::state_type,
+		ode::ode_traits<TuringModel>::time_type>
 {
 public:
-	AveragesLogger(const TuringModel& model,
-			ode::ode_traits<TuringModel>::time_type interval) :
+	AveragesLogger(const TuringModel& model, time_type interval) :
 			model_(model), c_diff_(model.graph(), model.concentrations()), interval_(
 					interval), next_(0)
 	{
@@ -21,8 +21,7 @@ public:
 	{
 		std::cout << "#t\tA\t<u>\t<v>\t<c_ij>\n";
 	}
-	void operator()(const ode::ode_traits<TuringModel>::state_type& state,
-			const ode::ode_traits<TuringModel>::time_type t)
+	void log(const state_type& state, const time_type t)
 	{
 		if (t >= next_)
 		{
@@ -37,7 +36,7 @@ public:
 private:
 	const TuringModel& model_;
 	ConcentrationDifference c_diff_;
-	ode::ode_traits<TuringModel>::time_type interval_, next_;
+	time_type interval_, next_;
 };
 
 #endif // AVERAGESLOGGER_H_

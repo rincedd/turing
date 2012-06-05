@@ -11,6 +11,8 @@ turing_SOURCES = \
 	src/ode/ODE.h \
 	src/ode/ode_traits.h \
 	src/ode/Integrator.h \
+	src/loggers/Logger.h \
+	src/loggers/Loggers.h \
 	src/loggers/AveragesLogger.h \
 	src/model/types.h \
 	src/model/TuringModel.h \

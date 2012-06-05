@@ -7,11 +7,9 @@
 
 using namespace largenet;
 
-TuringModel::TuringModel(Graph& g, Params p,
-		coupling_function_t activator_coupling,
-		coupling_function_t inhibitor_coupling) :
-		graph_(g), par_(p), concentrations_(2 * g.numberOfNodes(), 0.0), activator_coupling_(
-				activator_coupling), inhibitor_coupling_(inhibitor_coupling), laplacian_()
+TuringModel::TuringModel(Graph& g, Params p, Coupling coupling) :
+		graph_(g), par_(p), concentrations_(2 * g.numberOfNodes(), 0.0), coupling_(
+				coupling), laplacian_()
 {
 	recomputeLaplacian();
 }
@@ -81,8 +79,8 @@ void TuringModel::operator ()(const state_type& y, state_type& dydx,
 	size_t K = dim() / 2;
 	for (size_t i = 0; i < K; ++i)
 	{
-		dydx[i] = activator_coupling_(y[i], y[i + K]);
-		dydx[i + K] = inhibitor_coupling_(y[i], y[i + K]);
+		dydx[i] = coupling_.activatorCoupling(y[i], y[i + K]);
+		dydx[i + K] = coupling_.inhibitorCoupling(y[i], y[i + K]);
 	}
 	bnu::axpy_prod(laplacian_, y, dydx, false);
 }

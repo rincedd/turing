@@ -8,6 +8,7 @@
 #include "model/TuringModel.h"
 #include "ode/Integrator.h"
 #include "loggers/AveragesLogger.h"
+#include "loggers/Loggers.h"
 
 #include <largenet2/generators/generators.h>
 
@@ -72,7 +73,9 @@ void TuringApp::setup()
 	TuringModel::Params p =
 	{ opts_.params().activator_diffusion,
 			opts_.params().diffusion_ratio_inhibitor_activator };
-	model_ = new TuringModel(graph_, p, mimura::f, mimura::g);
+
+	TuringModel::Coupling c = { mimura::f, mimura::g };
+	model_ = new TuringModel(graph_, p, c);
 }
 
 void TuringApp::initConcentrations()
@@ -96,9 +99,11 @@ int TuringApp::exec()
 	ode::Integrator<TuringModel> integ(*model_, model_->concentrations(),
 			opts_.params().atol, opts_.params().rtol);
 
-	AveragesLogger logger(*model_, opts_.params().integration_timestep);
+	Loggers<ode::ode_traits<TuringModel>::state_type,
+			ode::ode_traits<TuringModel>::time_type> loggers;
+	loggers.registerLogger(
+			new AveragesLogger(*model_, opts_.params().integration_timestep));
 	integ.integrate(0, opts_.params().integration_time,
-			opts_.params().integration_timestep,
-			logger);
+			opts_.params().integration_timestep, loggers);
 	return 0;
 }
