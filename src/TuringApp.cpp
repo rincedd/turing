@@ -93,9 +93,12 @@ int TuringApp::exec()
 {
 	setup();
 	initConcentrations();
-	ode::Integrator<TuringModel, Logger> integ(*model_, model_->concentrations(),
+	ode::Integrator<TuringModel> integ(*model_, model_->concentrations(),
 			opts_.params().atol, opts_.params().rtol);
-	integ.registerLogger(new AveragesLogger(*model_, opts_.params().integration_timestep));
-	integ.integrate(0, opts_.params().integration_time, opts_.params().integration_timestep);
+
+	AveragesLogger logger(*model_, opts_.params().integration_timestep);
+	integ.integrate(0, opts_.params().integration_time,
+			opts_.params().integration_timestep,
+			logger);
 	return 0;
 }
