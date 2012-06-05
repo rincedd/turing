@@ -12,7 +12,6 @@
 #include "loggers/Loggers.h"
 
 #include <largenet2/generators/generators.h>
-#include <sstream>
 
 using namespace largenet;
 using namespace std;
@@ -104,9 +103,11 @@ void TuringApp::initConcentrations()
 
 string TuringApp::makeFilename(string tag) const
 {
-	stringstream s(name_);
-	s << opts_.toStr() << "-" << tag << ".dat";
-	return s.str();
+	string s(name_);
+	if (!s.empty())
+		s += "-";
+	s += opts_.toStr() + "-" + tag + ".dat";
+	return s;
 }
 
 int TuringApp::exec()

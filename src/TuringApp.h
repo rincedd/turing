@@ -23,7 +23,7 @@ class TuringApp
 public:
 	TuringApp();
 	void parseCommandLine(int argc, char** argv);
-	void setName(std::string name);
+	void setName(std::string name) { name_ = name; }
 	std::string name() const { return name_; }
 	int exec();
 	virtual ~TuringApp();
