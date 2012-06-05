@@ -17,7 +17,7 @@ public:
 	virtual ~AveragesLogger()
 	{
 	}
-	void writeHeader()
+	void writeHeader(const time_type t)
 	{
 		std::cout << "#t\tA\t<u>\t<v>\t<c_ij>\n";
 	}

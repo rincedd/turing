@@ -27,6 +27,13 @@ public:
 	{
 		loggers_.push_back(o);
 	}
+	void writeHeaders(const time_type t)
+	{
+		for (typename loggers_v::iterator it = loggers_.begin(); it != loggers_.end(); ++it)
+		{
+			it->writeHeader(t);
+		}
+	}
 	void operator()(const state_type& state, const time_type t)
 	{
 		for (typename loggers_v::iterator it = loggers_.begin(); it != loggers_.end(); ++it)

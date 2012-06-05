@@ -29,16 +29,18 @@ void ConcentrationDifference::update()
 	size_t K = concentrations_.size() / 2;
 	BOOST_FOREACH(const Edge& e, graph_.edges())
 	{
-		activator_diffs_[i] = concentrations_[e.source()->id()]
-				- concentrations_[e.target()->id()];
-		inhibitor_diffs_[i] = concentrations_[e.source()->id() + K]
-				- concentrations_[e.target()->id() + K];
+		activator_diffs_[i] = abs(
+				concentrations_[e.source()->id()]
+						- concentrations_[e.target()->id()]);
+		inhibitor_diffs_[i] = abs(
+				concentrations_[e.source()->id() + K]
+						- concentrations_[e.target()->id() + K]);
 		++i;
 	}
 }
 
 ConcentrationDifference::value_type ConcentrationDifference::value()
 {
-	return bnu::sum(activator_diffs_) / activator_diffs_.size()
-			+ bnu::sum(inhibitor_diffs_) / inhibitor_diffs_.size();
+	return (bnu::sum(activator_diffs_) + bnu::sum(inhibitor_diffs_))
+			/ activator_diffs_.size();
 }

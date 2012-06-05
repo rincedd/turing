@@ -103,7 +103,8 @@ int TuringApp::exec()
 			ode::ode_traits<TuringModel>::time_type> loggers;
 	loggers.registerLogger(
 			new AveragesLogger(*model_, opts_.params().integration_timestep));
-	integ.integrate(0, opts_.params().integration_time,
+	loggers.writeHeaders(0.0);
+	integ.integrate(0.0, opts_.params().integration_time,
 			opts_.params().integration_timestep, loggers);
 	return 0;
 }
