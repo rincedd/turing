@@ -8,14 +8,17 @@
 #include "model/TuringModel.h"
 #include "ode/Integrator.h"
 #include "loggers/AveragesLogger.h"
+#include "loggers/PatternLogger.h"
 #include "loggers/Loggers.h"
 
 #include <largenet2/generators/generators.h>
+#include <sstream>
 
 using namespace largenet;
+using namespace std;
 
 TuringApp::TuringApp() :
-		rng_(), opts_(), graph_(1, 1), model_(0)
+		name_(""), rng_(), opts_(), graph_(1, 1), model_(0), streams_()
 {
 }
 
@@ -59,13 +62,19 @@ double g(double u, double v)
 
 void TuringApp::setup()
 {
-	generators::randomGnm(graph_, opts_.params().num_nodes,
-			opts_.params().average_degree * opts_.params().num_nodes / 2, rng_,
-			false);
-//	generators::randomBA(graph_, opts_.params().num_nodes,
-//			opts_.params().average_degree / 2, rng_);
-	std::cout << "# ER network with N = ";
-//	std::cout << "# BA network with N = ";
+	if (opts_.params().net_type == "BA")
+	{
+		generators::randomBA(graph_, opts_.params().num_nodes,
+				opts_.params().average_degree / 2, rng_);
+		std::cout << "# BA network with N = ";
+	}
+	else
+	{
+		generators::randomGnm(graph_, opts_.params().num_nodes,
+				opts_.params().average_degree * opts_.params().num_nodes / 2,
+				rng_, false);
+		std::cout << "# ER network with N = ";
+	}
 	std::cout << graph_.numberOfNodes() << " and L = " << graph_.numberOfEdges()
 			<< " (<k> = "
 			<< 2.0 * graph_.numberOfEdges() / graph_.numberOfNodes() << ").\n";
@@ -74,7 +83,8 @@ void TuringApp::setup()
 	{ opts_.params().activator_diffusion,
 			opts_.params().diffusion_ratio_inhibitor_activator };
 
-	TuringModel::Coupling c = { mimura::f, mimura::g };
+	TuringModel::Coupling c =
+	{ mimura::f, mimura::g };
 	model_ = new TuringModel(graph_, p, c);
 }
 
@@ -92,6 +102,13 @@ void TuringApp::initConcentrations()
 	}
 }
 
+string TuringApp::makeFilename(string tag) const
+{
+	stringstream s(name_);
+	s << opts_.toStr() << "-" << tag << ".dat";
+	return s.str();
+}
+
 int TuringApp::exec()
 {
 	setup();
@@ -101,8 +118,12 @@ int TuringApp::exec()
 
 	Loggers<ode::ode_traits<TuringModel>::state_type,
 			ode::ode_traits<TuringModel>::time_type> loggers;
-	loggers.registerLogger(
-			new AveragesLogger(*model_, opts_.params().integration_timestep));
+	AveragesLogger* alog = new AveragesLogger(*model_, opts_.params().integration_timestep);
+	alog->setStream(streams_.openStream(makeFilename("averages")));
+	loggers.registerLogger(alog);
+	PatternLogger* plog = new PatternLogger(*model_, opts_.params().integration_time);
+	plog->setStream(streams_.openStream(makeFilename("patterns")));
+	loggers.registerLogger(plog);
 	loggers.writeHeaders(0.0);
 	integ.integrate(0.0, opts_.params().integration_time,
 			opts_.params().integration_timestep, loggers);

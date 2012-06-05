@@ -5,7 +5,7 @@
 #include "../model/TuringModel.h"
 #include "../model/ConcentrationDifference.h"
 
-class AveragesLogger: public Logger<ode::ode_traits<TuringModel>::state_type,
+class AveragesLogger: public StreamLogger<ode::ode_traits<TuringModel>::state_type,
 		ode::ode_traits<TuringModel>::time_type>
 {
 public:
@@ -19,14 +19,14 @@ public:
 	}
 	void writeHeader(const time_type t)
 	{
-		std::cout << "#t\tA\t<u>\t<v>\t<c_ij>\n";
+		stream() << "#t\tA\t<u>\t<v>\t<c_ij>\n";
 	}
 	void log(const state_type& state, const time_type t)
 	{
 		if (t >= next_)
 		{
 			c_diff_.update();
-			std::cout << t << "\t" << model_.patternAmplitude() << "\t"
+			stream() << t << "\t" << model_.patternAmplitude() << "\t"
 					<< model_.meanActivatorConcentration() << "\t"
 					<< model_.meanInhibitorConcentration() << "\t"
 					<< c_diff_.value() << "\n";

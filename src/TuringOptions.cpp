@@ -4,8 +4,10 @@
  */
 
 #include "TuringOptions.h"
+#include <boost/format.hpp>
 
 namespace po = boost::program_options;
+using namespace std;
 
 TuringOptions::TuringOptions() :
 		par_(), allOptions_("Allowed options")
@@ -30,6 +32,7 @@ void TuringOptions::init()
 			("initial-inhibitor-var", po::value<double>(&par_.inhibitor_var)->default_value(0.05), "Initial variance of inhibitor concentration.");
 
 	simOpts.add_options()
+			("network", po::value<std::string>(&par_.net_type)->default_value("random"), "Network type (random | BA).")
 			("nodes,n", po::value<size_t>(&par_.num_nodes)->default_value(100), "Number of nodes.")
 			("avg-degree,k", po::value<double>(&par_.average_degree)->default_value(20), "Intended average degree of network.")
 			("integration-time", po::value<double>(&par_.integration_time)->default_value(20.0), "Integration time.")
@@ -39,6 +42,15 @@ void TuringOptions::init()
 
 	allOptions_.add(modelOpts).add(iniOpts).add(simOpts);
 
+}
+
+string TuringOptions::toStr() const
+{
+	return str(boost::format("%1%-n%2%-k%3%--eps%4%-sigma%5%--t%6%-i%7%")
+							% par_.net_type % par_.num_nodes
+							% par_.average_degree % par_.activator_diffusion
+							% par_.diffusion_ratio_inhibitor_activator
+							% par_.integration_time % par_.integration_timestep);
 }
 
 void TuringOptions::parseCommandLine(int argc, char** argv)

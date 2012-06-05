@@ -8,12 +8,15 @@ turing_SOURCES = \
 	src/TuringOptions.h \
 	src/TuringApp.h \
 	src/TuringApp.cpp \
+	src/OStreamCollection.h \
 	src/ode/ODE.h \
 	src/ode/ode_traits.h \
 	src/ode/Integrator.h \
 	src/loggers/Logger.h \
 	src/loggers/Loggers.h \
 	src/loggers/AveragesLogger.h \
+	src/loggers/PatternLogger.h \
+	src/loggers/PatternLogger.cpp \
 	src/model/types.h \
 	src/model/TuringModel.h \
 	src/model/TuringModel.cpp \

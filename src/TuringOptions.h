@@ -18,6 +18,7 @@ struct TuringParameters
 	double activator_mean, activator_var;
 	double inhibitor_mean, inhibitor_var;
 
+	std::string net_type;
 	size_t num_nodes;
 	double average_degree;
 
@@ -55,6 +56,7 @@ public:
 	void parseCommandLine(int argc, char** argv);
 	const TuringParameters& params() const { return par_; }
 	void printHelpText(std::ostream& out) const { out << allOptions_ << "\n"; }
+	std::string toStr() const;
 private:
 	void init();
 private:
