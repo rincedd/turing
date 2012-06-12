@@ -21,6 +21,7 @@ public:
 	ConcentrationDifference(const largenet::Graph& g, const state_vector_t& concentrations);
 	virtual ~ConcentrationDifference() {}
 	value_type value();
+	value_type positiveFraction();
 	void update();
 private:
 	const largenet::Graph& graph_;

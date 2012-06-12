@@ -6,6 +6,8 @@
 #include "ConcentrationDifference.h"
 
 #include <boost/foreach.hpp>
+#include <functional>
+#include <algorithm>
 
 using namespace largenet;
 namespace bnu = boost::numeric::ublas;
@@ -43,4 +45,12 @@ ConcentrationDifference::value_type ConcentrationDifference::value()
 {
 	return (bnu::sum(activator_diffs_) + bnu::sum(inhibitor_diffs_))
 			/ activator_diffs_.size();
+}
+
+ConcentrationDifference::value_type ConcentrationDifference::positiveFraction()
+{
+	state_vector_t temp = activator_diffs_ + inhibitor_diffs_;
+	double n = std::count_if(temp.begin(), temp.end(),
+			std::bind2nd(std::greater<double>(), 0.0));
+	return n / activator_diffs_.size();
 }

@@ -5,7 +5,8 @@
 #include "../model/TuringModel.h"
 #include "../model/ConcentrationDifference.h"
 
-class AveragesLogger: public StreamLogger<ode::ode_traits<TuringModel>::state_type,
+class AveragesLogger: public StreamLogger<
+		ode::ode_traits<TuringModel>::state_type,
 		ode::ode_traits<TuringModel>::time_type>
 {
 public:
@@ -19,7 +20,7 @@ public:
 	}
 	void writeHeader(const time_type t)
 	{
-		stream() << "#t\tA\t<u>\t<v>\t<c_ij>\n";
+		stream() << "#t\tA\t<u>\t<v>\t<c_ij>\t[C_ij>0]\n";
 	}
 	void log(const state_type& state, const time_type t)
 	{
@@ -29,7 +30,8 @@ public:
 			stream() << t << "\t" << model_.patternAmplitude() << "\t"
 					<< model_.meanActivatorConcentration() << "\t"
 					<< model_.meanInhibitorConcentration() << "\t"
-					<< c_diff_.value() << "\n";
+					<< c_diff_.value() << "\t" << c_diff_.positiveFraction()
+					<< "\n";
 			next_ += interval_;
 		}
 	}
