@@ -31,6 +31,7 @@ protected:
 	std::string makeFilename(std::string tag) const;
 private:
 	void setup();
+	void initWeights();
 	void initConcentrations();
 
 	std::string name_;

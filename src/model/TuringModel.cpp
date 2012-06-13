@@ -1,4 +1,6 @@
 #include "TuringModel.h"
+#include "EdgeWeights.h"
+#include "DiffusionMatrix.h"
 #include <cmath>
 #include <largenet2/measures/spectrum.h>
 #include <boost/numeric/ublas/matrix_proxy.hpp>
@@ -9,29 +11,20 @@ using namespace largenet;
 
 TuringModel::TuringModel(Graph& g, Params p, Coupling coupling) :
 		graph_(g), par_(p), concentrations_(2 * g.numberOfNodes(), 0.0), coupling_(
-				coupling), laplacian_()
+				coupling), weights_(0), diff_matrix_(0)
 {
-	recomputeLaplacian();
+	weights_ = new EdgeWeights(graph_.numberOfEdges(), graph_.numberOfNodes());
+	BOOST_FOREACH(const Edge& e, graph_.edges())
+	{
+		weights_->setWeight(e, par_.diff_ratio_inhibitor_activator);
+	}
+	diff_matrix_ = new DiffusionMatrix(graph_, *weights_, par_.activator_d);
 }
 
 TuringModel::~TuringModel()
 {
-}
-
-void TuringModel::recomputeLaplacian()
-{
-	laplacian_matrix_t temp = -measures::laplacian(graph_);
-	if ((laplacian_.size1() != 2 * temp.size1())
-			|| (laplacian_.size2() != 2 * temp.size2()))
-	{
-		laplacian_.resize(2 * temp.size1(), 2 * temp.size2(), false);
-		laplacian_.reserve(2 * temp.nnz(), false);
-	}
-	bnu::subrange(laplacian_, 0, temp.size1(), 0, temp.size2()).assign(temp);
-	bnu::subrange(laplacian_, temp.size1(), laplacian_.size1(), temp.size2(),
-			laplacian_.size2()).assign(temp) *=
-			par_.diff_ratio_inhibitor_activator;
-	laplacian_ *= par_.activator_d;
+	delete diff_matrix_;
+	delete weights_;
 }
 
 const TuringModel::state_type& TuringModel::concentrations() const
@@ -82,5 +75,5 @@ void TuringModel::operator ()(const state_type& y, state_type& dydx,
 		dydx[i] = coupling_.activatorCoupling(y[i], y[i + K]);
 		dydx[i + K] = coupling_.inhibitorCoupling(y[i], y[i + K]);
 	}
-	bnu::axpy_prod(laplacian_, y, dydx, false);
+	bnu::axpy_prod(diff_matrix_->get(), y, dydx, false);
 }

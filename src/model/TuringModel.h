@@ -12,13 +12,13 @@
 #include "types.h"
 #include "../ode/ODE.h"
 
-#include <boost/numeric/ublas/matrix_sparse.hpp>
+class EdgeWeights;
+class DiffusionMatrix;
 
 class TuringModel: public ode::ODE<state_vector_t, time_value_t>
 {
 public:
 	typedef boost::function<double(double, double)> coupling_function_t;
-	typedef boost::numeric::ublas::compressed_matrix<double> laplacian_matrix_t;
 	struct Params
 	{
 		double activator_d; ///< diffusion constant of activator species
@@ -39,8 +39,6 @@ public:
 		return 2 * graph_.numberOfNodes();
 	}
 
-	void recomputeLaplacian();
-
 	void operator()(const state_type& y, state_type& dydx, const time_type x);
 
 	const state_type& concentrations() const;
@@ -57,7 +55,8 @@ private:
 	Params par_;
 	Coupling coupling_;
 	state_type concentrations_; //< activator and inhibitor concentrations
-	laplacian_matrix_t laplacian_;
+	EdgeWeights* weights_;
+	DiffusionMatrix* diff_matrix_;
 };
 
 #endif /* TURINGMODEL_H_ */

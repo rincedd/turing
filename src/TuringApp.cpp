@@ -119,10 +119,12 @@ int TuringApp::exec()
 
 	Loggers<ode::ode_traits<TuringModel>::state_type,
 			ode::ode_traits<TuringModel>::time_type> loggers;
-	AveragesLogger* alog = new AveragesLogger(*model_, opts_.params().integration_timestep);
+	AveragesLogger* alog = new AveragesLogger(*model_,
+			opts_.params().integration_timestep);
 	alog->setStream(streams_.openStream(makeFilename("averages")));
 	loggers.registerLogger(alog);
-	PatternLogger* plog = new PatternLogger(*model_, opts_.params().integration_time);
+	PatternLogger* plog = new PatternLogger(*model_,
+			opts_.params().integration_time);
 	plog->setStream(streams_.openStream(makeFilename("patterns")));
 	loggers.registerLogger(plog);
 	loggers.writeHeaders(0.0);

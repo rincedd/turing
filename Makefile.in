@@ -65,6 +65,7 @@ am_turing_OBJECTS = src/turing-turing.$(OBJEXT) \
 	src/loggers/turing-PatternLogger.$(OBJEXT) \
 	src/model/turing-TuringModel.$(OBJEXT) \
 	src/model/turing-ConcentrationDifference.$(OBJEXT) \
+	src/model/turing-DiffusionMatrix.$(OBJEXT) \
 	src/myrng1.3/turing-MTEngine.$(OBJEXT) \
 	src/myrng1.3/turing-WELLEngine.$(OBJEXT)
 turing_OBJECTS = $(am_turing_OBJECTS)
@@ -295,6 +296,9 @@ turing_SOURCES = \
 	src/model/OrderParameter.h \
 	src/model/ConcentrationDifference.h \
 	src/model/ConcentrationDifference.cpp \
+	src/model/DiffusionMatrix.h \
+	src/model/DiffusionMatrix.cpp \
+	src/model/EdgeWeights.h \
 	src/myrng1.3/MTEngine.cpp \
 	src/myrng1.3/MTEngine.h \
 	src/myrng1.3/myrng.h \
@@ -437,6 +441,8 @@ src/model/turing-TuringModel.$(OBJEXT): src/model/$(am__dirstamp) \
 	src/model/$(DEPDIR)/$(am__dirstamp)
 src/model/turing-ConcentrationDifference.$(OBJEXT):  \
 	src/model/$(am__dirstamp) src/model/$(DEPDIR)/$(am__dirstamp)
+src/model/turing-DiffusionMatrix.$(OBJEXT): src/model/$(am__dirstamp) \
+	src/model/$(DEPDIR)/$(am__dirstamp)
 src/myrng1.3/$(am__dirstamp):
 	@$(MKDIR_P) src/myrng1.3
 	@: > src/myrng1.3/$(am__dirstamp)
@@ -456,6 +462,7 @@ mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f src/loggers/turing-PatternLogger.$(OBJEXT)
 	-rm -f src/model/turing-ConcentrationDifference.$(OBJEXT)
+	-rm -f src/model/turing-DiffusionMatrix.$(OBJEXT)
 	-rm -f src/model/turing-TuringModel.$(OBJEXT)
 	-rm -f src/myrng1.3/turing-MTEngine.$(OBJEXT)
 	-rm -f src/myrng1.3/turing-WELLEngine.$(OBJEXT)
@@ -471,6 +478,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/turing-turing.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/loggers/$(DEPDIR)/turing-PatternLogger.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-ConcentrationDifference.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-DiffusionMatrix.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-TuringModel.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/myrng1.3/$(DEPDIR)/turing-MTEngine.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/myrng1.3/$(DEPDIR)/turing-WELLEngine.Po@am__quote@
@@ -582,6 +590,20 @@ src/model/turing-ConcentrationDifference.obj: src/model/ConcentrationDifference.
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/model/ConcentrationDifference.cpp' object='src/model/turing-ConcentrationDifference.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/model/turing-ConcentrationDifference.obj `if test -f 'src/model/ConcentrationDifference.cpp'; then $(CYGPATH_W) 'src/model/ConcentrationDifference.cpp'; else $(CYGPATH_W) '$(srcdir)/src/model/ConcentrationDifference.cpp'; fi`
+
+src/model/turing-DiffusionMatrix.o: src/model/DiffusionMatrix.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/model/turing-DiffusionMatrix.o -MD -MP -MF src/model/$(DEPDIR)/turing-DiffusionMatrix.Tpo -c -o src/model/turing-DiffusionMatrix.o `test -f 'src/model/DiffusionMatrix.cpp' || echo '$(srcdir)/'`src/model/DiffusionMatrix.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/model/$(DEPDIR)/turing-DiffusionMatrix.Tpo src/model/$(DEPDIR)/turing-DiffusionMatrix.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/model/DiffusionMatrix.cpp' object='src/model/turing-DiffusionMatrix.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/model/turing-DiffusionMatrix.o `test -f 'src/model/DiffusionMatrix.cpp' || echo '$(srcdir)/'`src/model/DiffusionMatrix.cpp
+
+src/model/turing-DiffusionMatrix.obj: src/model/DiffusionMatrix.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/model/turing-DiffusionMatrix.obj -MD -MP -MF src/model/$(DEPDIR)/turing-DiffusionMatrix.Tpo -c -o src/model/turing-DiffusionMatrix.obj `if test -f 'src/model/DiffusionMatrix.cpp'; then $(CYGPATH_W) 'src/model/DiffusionMatrix.cpp'; else $(CYGPATH_W) '$(srcdir)/src/model/DiffusionMatrix.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/model/$(DEPDIR)/turing-DiffusionMatrix.Tpo src/model/$(DEPDIR)/turing-DiffusionMatrix.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/model/DiffusionMatrix.cpp' object='src/model/turing-DiffusionMatrix.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/model/turing-DiffusionMatrix.obj `if test -f 'src/model/DiffusionMatrix.cpp'; then $(CYGPATH_W) 'src/model/DiffusionMatrix.cpp'; else $(CYGPATH_W) '$(srcdir)/src/model/DiffusionMatrix.cpp'; fi`
 
 src/myrng1.3/turing-MTEngine.o: src/myrng1.3/MTEngine.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/myrng1.3/turing-MTEngine.o -MD -MP -MF src/myrng1.3/$(DEPDIR)/turing-MTEngine.Tpo -c -o src/myrng1.3/turing-MTEngine.o `test -f 'src/myrng1.3/MTEngine.cpp' || echo '$(srcdir)/'`src/myrng1.3/MTEngine.cpp

@@ -8,6 +8,7 @@
 
 #include <largenet2/base/GraphListener.h>
 #include <boost/unordered_map.hpp>
+#include <boost/signals2/signal.hpp>
 
 /**
  * 
@@ -15,6 +16,9 @@
  */
 class EdgeWeights: public largenet::GraphListener
 {
+public: // signals
+	boost::signals2::signal<void (largenet::edge_id_t, double, double)> weight_changed;
+
 public:
 	/**
 	 * Constructor.
@@ -36,6 +40,17 @@ public:
 		/// FIXME this could be problematic due to round-off errors
 		strengths_[e.source()->id()] += value - old_weight;
 		strengths_[e.target()->id()] += value - old_weight;
+		weight_changed(e.id(), old_weight, value);
+	}
+
+	double operator()(const largenet::edge_id_t e) const
+	{
+		return weight(e);
+	}
+
+	double operator()(const largenet::Edge& e) const
+	{
+		return weight(e);
 	}
 
 	double weight(const largenet::edge_id_t e) const

@@ -23,6 +23,8 @@ turing_SOURCES = \
 	src/model/OrderParameter.h \
 	src/model/ConcentrationDifference.h \
 	src/model/ConcentrationDifference.cpp \
+	src/model/DiffusionMatrix.h \
+	src/model/DiffusionMatrix.cpp \
 	src/model/EdgeWeights.h \
 	src/myrng1.3/MTEngine.cpp \
 	src/myrng1.3/MTEngine.h \
