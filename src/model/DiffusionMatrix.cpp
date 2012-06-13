@@ -41,8 +41,15 @@ void DiffusionMatrix::recompute(const Graph& g, const EdgeWeights& w)
 	matrix_ *= prefactor_;
 }
 
-void DiffusionMatrix::onWeightChange(edge_id_t e, double old_weight,
+void DiffusionMatrix::onWeightChange(const Edge& e, double old_weight,
 		double new_weight)
 {
-	/// TODO implement me
+	size_t i = e.source()->id(), j = e.target()->id();
+	if (i == j)
+		return;
+
+	size_t K = matrix_.size1() / 2;
+
+	matrix_(i + K, j + K) = new_weight;
+	matrix_(j + K, i + K) = new_weight;
 }

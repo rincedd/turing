@@ -17,7 +17,7 @@
 class EdgeWeights: public largenet::GraphListener
 {
 public: // signals
-	boost::signals2::signal<void (largenet::edge_id_t, double, double)> weight_changed;
+	boost::signals2::signal<void (const largenet::Edge&, double, double)> weight_changed;
 
 public:
 	/**
@@ -40,7 +40,7 @@ public:
 		/// FIXME this could be problematic due to round-off errors
 		strengths_[e.source()->id()] += value - old_weight;
 		strengths_[e.target()->id()] += value - old_weight;
-		weight_changed(e.id(), old_weight, value);
+		weight_changed(e, old_weight, value);
 	}
 
 	double operator()(const largenet::edge_id_t e) const
