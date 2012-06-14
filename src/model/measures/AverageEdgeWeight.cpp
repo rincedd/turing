@@ -4,7 +4,7 @@
  */
 
 #include "AverageEdgeWeight.h"
-#include "EdgeWeights.h"
+#include "../EdgeWeights.h"
 #include <boost/bind.hpp>
 #include <boost/foreach.hpp>
 

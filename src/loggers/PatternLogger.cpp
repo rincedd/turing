@@ -9,10 +9,10 @@
 
 using namespace largenet;
 
-PatternLogger::PatternLogger(const TuringModel& model, time_type interval) :
+PatternLogger::PatternLogger(const TuringModel& model, const Graph& g, time_type interval) :
 		model_(model), interval_(interval), next_(0), nodes_()
 {
-	BOOST_FOREACH(const Node& n, model_.graph().nodes())
+	BOOST_FOREACH(const Node& n, g.nodes())
 	{
 		nodes_.insert(std::make_pair(n.degree(), n.id()));
 	}

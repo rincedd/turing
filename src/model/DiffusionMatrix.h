@@ -4,7 +4,7 @@
 #include <boost/numeric/ublas/matrix_sparse.hpp>
 #include <largenet2.h>
 
-#include "EdgeWeights.h"
+class EdgeWeights;
 
 /**
  * 

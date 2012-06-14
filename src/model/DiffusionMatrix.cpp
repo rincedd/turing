@@ -3,10 +3,12 @@
  * @date 13.06.2012
  */
 
-#include "DiffusionMatrix.h"
 #include <boost/bind.hpp>
 #include <boost/numeric/ublas/matrix_proxy.hpp>
 #include <largenet2/measures/spectrum.h>
+
+#include "DiffusionMatrix.h"
+#include "EdgeWeights.h"
 
 using namespace largenet;
 namespace bnu = boost::numeric::ublas;

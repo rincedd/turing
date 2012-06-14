@@ -20,15 +20,17 @@ turing_SOURCES = \
 	src/model/types.h \
 	src/model/TuringModel.h \
 	src/model/TuringModel.cpp \
-	src/model/OrderParameter.h \
-	src/model/ConcentrationDifference.h \
-	src/model/ConcentrationDifference.cpp \
+	src/model/measures/OrderParameter.h \
+	src/model/measures/ConcentrationDifference.h \
+	src/model/measures/ConcentrationDifference.cpp \
 	src/model/DiffusionMatrix.h \
 	src/model/DiffusionMatrix.cpp \
-	src/model/AverageEdgeWeight.h \
-	src/model/AverageEdgeWeight.cpp \
-	src/model/AverageNodeStrength.h \
-	src/model/AverageNodeStrength.cpp \
+	src/model/measures/AverageEdgeWeight.h \
+	src/model/measures/AverageEdgeWeight.cpp \
+	src/model/measures/AverageNodeStrength.h \
+	src/model/measures/AverageNodeStrength.cpp \
+	src/model/measures/AverageConcentrations.h \
+	src/model/measures/PatternAmplitude.h \
 	src/model/EdgeWeights.h \
 	src/myrng1.3/MTEngine.cpp \
 	src/myrng1.3/MTEngine.h \

@@ -4,7 +4,7 @@
  */
 
 #include "AverageNodeStrength.h"
-#include "EdgeWeights.h"
+#include "../EdgeWeights.h"
 #include <boost/foreach.hpp>
 #include <boost/bind.hpp>
 

@@ -13,11 +13,8 @@
 #include <largenet2.h>
 
 class TuringModel;
+class EdgeWeights;
 
-/**
- * 
- *
- */
 class TuringApp
 {
 public:
@@ -38,6 +35,7 @@ private:
 	myrng::WELL1024a rng_;
 	TuringOptions opts_;
 	largenet::Graph graph_;
+	EdgeWeights* weights_;
 	TuringModel* model_;
 	OStreamCollection streams_;
 };

@@ -4,7 +4,7 @@
  */
 
 #include "TuringApp.h"
-
+#include "model/EdgeWeights.h"
 #include "model/TuringModel.h"
 #include "ode/Integrator.h"
 #include "loggers/AveragesLogger.h"
@@ -17,13 +17,14 @@ using namespace largenet;
 using namespace std;
 
 TuringApp::TuringApp() :
-		name_(""), rng_(), opts_(), graph_(1, 1), model_(0), streams_()
+		name_(""), rng_(), opts_(), graph_(1, 1), weights_(0), model_(0), streams_()
 {
 }
 
 TuringApp::~TuringApp()
 {
 	delete model_;
+	delete weights_;
 }
 
 void TuringApp::parseCommandLine(int argc, char** argv)
@@ -74,17 +75,24 @@ void TuringApp::setup()
 				rng_, false);
 		std::cout << "# ER network with N = ";
 	}
+	/// TODO use some logger/logging framework for this
 	std::cout << graph_.numberOfNodes() << " and L = " << graph_.numberOfEdges()
 			<< " (<k> = "
 			<< 2.0 * graph_.numberOfEdges() / graph_.numberOfNodes() << ").\n";
 
+	weights_ = new EdgeWeights(graph_.numberOfEdges(), graph_.numberOfNodes());
+	BOOST_FOREACH(const Edge& e, graph_.edges())
+	{
+		weights_->setWeight(e,
+				opts_.params().diffusion_ratio_inhibitor_activator);
+	}
+
 	TuringModel::Params p =
 	{ opts_.params().activator_diffusion,
 			opts_.params().diffusion_ratio_inhibitor_activator };
-
 	TuringModel::Coupling c =
 	{ mimura::f, mimura::g };
-	model_ = new TuringModel(graph_, p, c);
+	model_ = new TuringModel(graph_, *weights_, p, c);
 }
 
 void TuringApp::initConcentrations()
@@ -119,11 +127,11 @@ int TuringApp::exec()
 
 	Loggers<ode::ode_traits<TuringModel>::state_type,
 			ode::ode_traits<TuringModel>::time_type> loggers;
-	AveragesLogger* alog = new AveragesLogger(*model_,
+	AveragesLogger* alog = new AveragesLogger(graph_, model_->concentrations(),
 			opts_.params().integration_timestep);
 	alog->setStream(streams_.openStream(makeFilename("averages")));
 	loggers.registerLogger(alog);
-	PatternLogger* plog = new PatternLogger(*model_,
+	PatternLogger* plog = new PatternLogger(*model_, graph_,
 			opts_.params().integration_time);
 	plog->setStream(streams_.openStream(makeFilename("patterns")));
 	loggers.registerLogger(plog);

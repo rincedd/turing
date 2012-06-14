@@ -24,7 +24,7 @@ private:
 	typedef std::multimap<largenet::degree_t, largenet::node_id_t,
 			std::greater<largenet::degree_t> > degree_map_t;
 public:
-	PatternLogger(const TuringModel& model, time_type interval);
+	PatternLogger(const TuringModel& model, const largenet::Graph& g, time_type interval);
 	virtual ~PatternLogger()
 	{
 	}

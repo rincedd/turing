@@ -11,9 +11,9 @@
 
 #include "types.h"
 #include "../ode/ODE.h"
+#include "DiffusionMatrix.h"
 
 class EdgeWeights;
-class DiffusionMatrix;
 
 class TuringModel: public ode::ODE<state_vector_t, time_value_t>
 {
@@ -31,12 +31,12 @@ public:
 		coupling_function_t inhibitorCoupling;
 	};
 public:
-	TuringModel(largenet::Graph& g, Params p, Coupling coupling);
+	TuringModel(largenet::Graph& g, EdgeWeights& w, Params p, Coupling coupling);
 	virtual ~TuringModel();
 
 	size_t dim() const
 	{
-		return 2 * graph_.numberOfNodes();
+		return concentrations_.size();
 	}
 
 	void operator()(const state_type& y, state_type& dydx, const time_type x);
@@ -44,19 +44,11 @@ public:
 	const state_type& concentrations() const;
 	state_type& concentrations();
 
-	const largenet::Graph& graph() const { return graph_; }
-
-	double patternAmplitude() const;
-	double meanActivatorConcentration() const;
-	double meanInhibitorConcentration() const;
-
 private:
-	largenet::Graph& graph_;
 	Params par_;
 	Coupling coupling_;
 	state_type concentrations_; //< activator and inhibitor concentrations
-	EdgeWeights* weights_;
-	DiffusionMatrix* diff_matrix_;
+	DiffusionMatrix diff_matrix_;
 };
 
 #endif /* TURINGMODEL_H_ */
