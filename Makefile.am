@@ -25,6 +25,10 @@ turing_SOURCES = \
 	src/model/ConcentrationDifference.cpp \
 	src/model/DiffusionMatrix.h \
 	src/model/DiffusionMatrix.cpp \
+	src/model/AverageEdgeWeight.h \
+	src/model/AverageEdgeWeight.cpp \
+	src/model/AverageNodeStrength.h \
+	src/model/AverageNodeStrength.cpp \
 	src/model/EdgeWeights.h \
 	src/myrng1.3/MTEngine.cpp \
 	src/myrng1.3/MTEngine.h \

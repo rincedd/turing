@@ -17,7 +17,7 @@ DiffusionMatrix::DiffusionMatrix(const Graph& g, EdgeWeights& w,
 {
 	recompute(g, w);
 	w.weight_changed.connect(
-			boost::bind(&DiffusionMatrix::onWeightChange, this, _1, _2, _3));
+			boost::bind(&DiffusionMatrix::updateEdgeWeight, this, _1, _2, _3));
 }
 
 DiffusionMatrix::~DiffusionMatrix()
@@ -41,7 +41,7 @@ void DiffusionMatrix::recompute(const Graph& g, const EdgeWeights& w)
 	matrix_ *= prefactor_;
 }
 
-void DiffusionMatrix::onWeightChange(const Edge& e, double old_weight,
+void DiffusionMatrix::updateEdgeWeight(const Edge& e, double old_weight,
 		double new_weight)
 {
 	size_t i = e.source()->id(), j = e.target()->id();

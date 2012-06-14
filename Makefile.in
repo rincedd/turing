@@ -66,6 +66,8 @@ am_turing_OBJECTS = src/turing-turing.$(OBJEXT) \
 	src/model/turing-TuringModel.$(OBJEXT) \
 	src/model/turing-ConcentrationDifference.$(OBJEXT) \
 	src/model/turing-DiffusionMatrix.$(OBJEXT) \
+	src/model/turing-AverageEdgeWeight.$(OBJEXT) \
+	src/model/turing-AverageNodeStrength.$(OBJEXT) \
 	src/myrng1.3/turing-MTEngine.$(OBJEXT) \
 	src/myrng1.3/turing-WELLEngine.$(OBJEXT)
 turing_OBJECTS = $(am_turing_OBJECTS)
@@ -298,6 +300,10 @@ turing_SOURCES = \
 	src/model/ConcentrationDifference.cpp \
 	src/model/DiffusionMatrix.h \
 	src/model/DiffusionMatrix.cpp \
+	src/model/AverageEdgeWeight.h \
+	src/model/AverageEdgeWeight.cpp \
+	src/model/AverageNodeStrength.h \
+	src/model/AverageNodeStrength.cpp \
 	src/model/EdgeWeights.h \
 	src/myrng1.3/MTEngine.cpp \
 	src/myrng1.3/MTEngine.h \
@@ -443,6 +449,10 @@ src/model/turing-ConcentrationDifference.$(OBJEXT):  \
 	src/model/$(am__dirstamp) src/model/$(DEPDIR)/$(am__dirstamp)
 src/model/turing-DiffusionMatrix.$(OBJEXT): src/model/$(am__dirstamp) \
 	src/model/$(DEPDIR)/$(am__dirstamp)
+src/model/turing-AverageEdgeWeight.$(OBJEXT):  \
+	src/model/$(am__dirstamp) src/model/$(DEPDIR)/$(am__dirstamp)
+src/model/turing-AverageNodeStrength.$(OBJEXT):  \
+	src/model/$(am__dirstamp) src/model/$(DEPDIR)/$(am__dirstamp)
 src/myrng1.3/$(am__dirstamp):
 	@$(MKDIR_P) src/myrng1.3
 	@: > src/myrng1.3/$(am__dirstamp)
@@ -461,6 +471,8 @@ turing$(EXEEXT): $(turing_OBJECTS) $(turing_DEPENDENCIES) $(EXTRA_turing_DEPENDE
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f src/loggers/turing-PatternLogger.$(OBJEXT)
+	-rm -f src/model/turing-AverageEdgeWeight.$(OBJEXT)
+	-rm -f src/model/turing-AverageNodeStrength.$(OBJEXT)
 	-rm -f src/model/turing-ConcentrationDifference.$(OBJEXT)
 	-rm -f src/model/turing-DiffusionMatrix.$(OBJEXT)
 	-rm -f src/model/turing-TuringModel.$(OBJEXT)
@@ -477,6 +489,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/turing-TuringOptions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/turing-turing.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/loggers/$(DEPDIR)/turing-PatternLogger.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-AverageEdgeWeight.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-AverageNodeStrength.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-ConcentrationDifference.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-DiffusionMatrix.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-TuringModel.Po@am__quote@
@@ -604,6 +618,34 @@ src/model/turing-DiffusionMatrix.obj: src/model/DiffusionMatrix.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/model/DiffusionMatrix.cpp' object='src/model/turing-DiffusionMatrix.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/model/turing-DiffusionMatrix.obj `if test -f 'src/model/DiffusionMatrix.cpp'; then $(CYGPATH_W) 'src/model/DiffusionMatrix.cpp'; else $(CYGPATH_W) '$(srcdir)/src/model/DiffusionMatrix.cpp'; fi`
+
+src/model/turing-AverageEdgeWeight.o: src/model/AverageEdgeWeight.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/model/turing-AverageEdgeWeight.o -MD -MP -MF src/model/$(DEPDIR)/turing-AverageEdgeWeight.Tpo -c -o src/model/turing-AverageEdgeWeight.o `test -f 'src/model/AverageEdgeWeight.cpp' || echo '$(srcdir)/'`src/model/AverageEdgeWeight.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/model/$(DEPDIR)/turing-AverageEdgeWeight.Tpo src/model/$(DEPDIR)/turing-AverageEdgeWeight.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/model/AverageEdgeWeight.cpp' object='src/model/turing-AverageEdgeWeight.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/model/turing-AverageEdgeWeight.o `test -f 'src/model/AverageEdgeWeight.cpp' || echo '$(srcdir)/'`src/model/AverageEdgeWeight.cpp
+
+src/model/turing-AverageEdgeWeight.obj: src/model/AverageEdgeWeight.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/model/turing-AverageEdgeWeight.obj -MD -MP -MF src/model/$(DEPDIR)/turing-AverageEdgeWeight.Tpo -c -o src/model/turing-AverageEdgeWeight.obj `if test -f 'src/model/AverageEdgeWeight.cpp'; then $(CYGPATH_W) 'src/model/AverageEdgeWeight.cpp'; else $(CYGPATH_W) '$(srcdir)/src/model/AverageEdgeWeight.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/model/$(DEPDIR)/turing-AverageEdgeWeight.Tpo src/model/$(DEPDIR)/turing-AverageEdgeWeight.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/model/AverageEdgeWeight.cpp' object='src/model/turing-AverageEdgeWeight.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/model/turing-AverageEdgeWeight.obj `if test -f 'src/model/AverageEdgeWeight.cpp'; then $(CYGPATH_W) 'src/model/AverageEdgeWeight.cpp'; else $(CYGPATH_W) '$(srcdir)/src/model/AverageEdgeWeight.cpp'; fi`
+
+src/model/turing-AverageNodeStrength.o: src/model/AverageNodeStrength.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/model/turing-AverageNodeStrength.o -MD -MP -MF src/model/$(DEPDIR)/turing-AverageNodeStrength.Tpo -c -o src/model/turing-AverageNodeStrength.o `test -f 'src/model/AverageNodeStrength.cpp' || echo '$(srcdir)/'`src/model/AverageNodeStrength.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/model/$(DEPDIR)/turing-AverageNodeStrength.Tpo src/model/$(DEPDIR)/turing-AverageNodeStrength.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/model/AverageNodeStrength.cpp' object='src/model/turing-AverageNodeStrength.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/model/turing-AverageNodeStrength.o `test -f 'src/model/AverageNodeStrength.cpp' || echo '$(srcdir)/'`src/model/AverageNodeStrength.cpp
+
+src/model/turing-AverageNodeStrength.obj: src/model/AverageNodeStrength.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/model/turing-AverageNodeStrength.obj -MD -MP -MF src/model/$(DEPDIR)/turing-AverageNodeStrength.Tpo -c -o src/model/turing-AverageNodeStrength.obj `if test -f 'src/model/AverageNodeStrength.cpp'; then $(CYGPATH_W) 'src/model/AverageNodeStrength.cpp'; else $(CYGPATH_W) '$(srcdir)/src/model/AverageNodeStrength.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/model/$(DEPDIR)/turing-AverageNodeStrength.Tpo src/model/$(DEPDIR)/turing-AverageNodeStrength.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/model/AverageNodeStrength.cpp' object='src/model/turing-AverageNodeStrength.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/model/turing-AverageNodeStrength.obj `if test -f 'src/model/AverageNodeStrength.cpp'; then $(CYGPATH_W) 'src/model/AverageNodeStrength.cpp'; else $(CYGPATH_W) '$(srcdir)/src/model/AverageNodeStrength.cpp'; fi`
 
 src/myrng1.3/turing-MTEngine.o: src/myrng1.3/MTEngine.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/myrng1.3/turing-MTEngine.o -MD -MP -MF src/myrng1.3/$(DEPDIR)/turing-MTEngine.Tpo -c -o src/myrng1.3/turing-MTEngine.o `test -f 'src/myrng1.3/MTEngine.cpp' || echo '$(srcdir)/'`src/myrng1.3/MTEngine.cpp

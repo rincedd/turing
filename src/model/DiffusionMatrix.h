@@ -22,7 +22,7 @@ public:
 
 private:
 	void recompute(const largenet::Graph& g, const EdgeWeights& w);
-	void onWeightChange(const largenet::Edge& e, double old_weight,
+	void updateEdgeWeight(const largenet::Edge& e, double old_weight,
 			double new_weight);
 
 private:

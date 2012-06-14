@@ -9,6 +9,7 @@
 #include <largenet2/base/GraphListener.h>
 #include <boost/unordered_map.hpp>
 #include <boost/signals2/signal.hpp>
+#include <boost/foreach.hpp>
 
 /**
  * 
@@ -16,6 +17,10 @@
  */
 class EdgeWeights: public largenet::GraphListener
 {
+public:
+	typedef boost::unordered::unordered_map<largenet::edge_id_t, double> edge_weight_map_t;
+	typedef boost::unordered::unordered_map<largenet::node_id_t, double> node_strength_map_t;
+
 public: // signals
 	boost::signals2::signal<void (const largenet::Edge&, double, double)> weight_changed;
 
@@ -73,6 +78,9 @@ public:
 		return strengths_.at(n);
 	}
 
+	const edge_weight_map_t& weights() const { return weights_; }
+	const node_strength_map_t& strengths() const { return strengths_; }
+
 private:
 //	void afterEdgeAddEvent(largenet::Graph& g, largenet::Edge& e);
 	void beforeEdgeRemoveEvent(largenet::Graph& g, largenet::Edge& e)
@@ -86,8 +94,6 @@ private:
 //	void afterEdgeStateChangeEvent(largenet::Graph& g, largenet::Edge& e,
 //			largenet::edge_state_t oldState, largenet::edge_state_t newState);
 private:
-	typedef boost::unordered::unordered_map<largenet::edge_id_t, double> edge_weight_map_t;
-	typedef boost::unordered::unordered_map<largenet::node_id_t, double> node_strength_map_t;
 	edge_weight_map_t weights_;
 	node_strength_map_t strengths_;
 };
