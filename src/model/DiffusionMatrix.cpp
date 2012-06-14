@@ -50,6 +50,6 @@ void DiffusionMatrix::updateEdgeWeight(const Edge& e, double old_weight,
 
 	size_t K = matrix_.size1() / 2;
 
-	matrix_(i + K, j + K) = new_weight;
-	matrix_(j + K, i + K) = new_weight;
+	matrix_(i + K, j + K) = prefactor_ * new_weight;
+	matrix_(j + K, i + K) = prefactor_ * new_weight;
 }
