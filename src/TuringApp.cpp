@@ -5,11 +5,9 @@
 
 #include "TuringApp.h"
 #include "model/EdgeWeights.h"
-#include "model/TuringModel.h"
 #include "ode/Integrator.h"
 #include "loggers/AveragesLogger.h"
 #include "loggers/PatternLogger.h"
-#include "loggers/Loggers.h"
 
 #include <largenet2/generators/generators.h>
 
@@ -118,12 +116,19 @@ string TuringApp::makeFilename(string tag) const
 	return s;
 }
 
+void TuringApp::integrate(ode::ode_traits<TuringModel>::time_type from,
+		ode::ode_traits<TuringModel>::time_type to,
+		ode::ode_traits<TuringModel>::time_type dt, loggers_t& loggers)
+{
+	ode::Integrator<TuringModel> integ(*model_, model_->concentrations(),
+			opts_.params().atol, opts_.params().rtol);
+	integ.integrate(from, to, dt, loggers);
+}
+
 int TuringApp::exec()
 {
 	setup();
 	initConcentrations();
-	ode::Integrator<TuringModel> integ(*model_, model_->concentrations(),
-			opts_.params().atol, opts_.params().rtol);
 
 	Loggers<ode::ode_traits<TuringModel>::state_type,
 			ode::ode_traits<TuringModel>::time_type> loggers;
@@ -135,8 +140,8 @@ int TuringApp::exec()
 			<< " network with " << graph_.numberOfNodes() << " nodes and "
 			<< graph_.numberOfEdges() << " edges.\n# Parameters:"
 			<< "\n# epsilon = " << opts_.params().activator_diffusion
-			<< "\n# sigma = " << opts_.params().diffusion_ratio_inhibitor_activator
-			<< "\n";
+			<< "\n# sigma = "
+			<< opts_.params().diffusion_ratio_inhibitor_activator << "\n";
 	alog->setStream(avg_strm);
 	loggers.registerLogger(alog);
 	PatternLogger* plog = new PatternLogger(*model_, graph_,
@@ -144,7 +149,7 @@ int TuringApp::exec()
 	plog->setStream(streams_.openStream(makeFilename("patterns")));
 	loggers.registerLogger(plog);
 	loggers.writeHeaders(0.0);
-	integ.integrate(0.0, opts_.params().integration_time,
+	integrate(0.0, opts_.params().integration_time,
 			opts_.params().integration_timestep, loggers);
 	return 0;
 }
