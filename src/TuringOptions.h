@@ -25,6 +25,9 @@ struct TuringParameters
 	double integration_timestep;
 	double integration_time;
 	double atol, rtol;
+
+	size_t num_iterations;
+	double weight_increment, weight_decrement;
 };
 
 /**

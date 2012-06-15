@@ -19,7 +19,8 @@ TuringOptions::TuringOptions() :
 void TuringOptions::init()
 {
 	po::options_description modelOpts("Model parameters"), iniOpts(
-			"Initial conditions"), simOpts("Simulation parameters");
+			"Initial conditions"), simOpts("Simulation parameters"),
+			intOpts("Integration parameters");
 
 	modelOpts.add_options()
 			("epsilon,e", po::value<double>(&par_.activator_diffusion)->default_value(0.12), "Diffusion constant of activator.")
@@ -35,22 +36,30 @@ void TuringOptions::init()
 			("network", po::value<std::string>(&par_.net_type)->default_value("random"), "Network type (random | BA).")
 			("nodes,n", po::value<size_t>(&par_.num_nodes)->default_value(100), "Number of nodes.")
 			("avg-degree,k", po::value<double>(&par_.average_degree)->default_value(20), "Intended average degree of network.")
+			("iterations", po::value<size_t>(&par_.num_iterations)->default_value(10), "Number of topological update steps.")
+			("increment", po::value<double>(&par_.weight_increment)->default_value(0.1), "Edge weight increment")
+			("decrement", po::value<double>(&par_.weight_decrement)->default_value(0.01), "Edge weight decrement");
+
+	intOpts.add_options()
 			("integration-time", po::value<double>(&par_.integration_time)->default_value(20.0), "Integration time.")
 			("timestep", po::value<double>(&par_.integration_timestep)->default_value(0.5), "Integration time step.")
 			("atol", po::value<double>(&par_.atol)->default_value(1e-4), "Absolute error tolerance for integration.")
 			("rtol", po::value<double>(&par_.rtol)->default_value(1e-3), "Relative error tolerance for integration.");
 
-	allOptions_.add(modelOpts).add(iniOpts).add(simOpts);
-
+	allOptions_.add(modelOpts).add(iniOpts).add(simOpts).add(intOpts);
 }
 
 string TuringOptions::toStr() const
 {
-	return str(boost::format("%1%-n%2%-k%3%--eps%4%-sigma%5%--t%6%-i%7%")
-							% par_.net_type % par_.num_nodes
-							% par_.average_degree % par_.activator_diffusion
-							% par_.diffusion_ratio_inhibitor_activator
-							% par_.integration_time % par_.integration_timestep);
+	return str(
+			boost::format(
+					"%1%-n%2%-k%3%--eps%4%-sigma%5%--t%6%-i%7%--I%8%-du%9%-dd%10%")
+					% par_.net_type % par_.num_nodes % par_.average_degree
+					% par_.activator_diffusion
+					% par_.diffusion_ratio_inhibitor_activator
+					% par_.integration_time % par_.integration_timestep
+					% par_.num_iterations % par_.weight_increment
+					% par_.weight_decrement);
 }
 
 void TuringOptions::parseCommandLine(int argc, char** argv)
