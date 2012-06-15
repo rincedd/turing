@@ -132,17 +132,23 @@ void TuringApp::integrate(ode::ode_traits<TuringModel>::time_type from,
 
 void TuringApp::updateTopology()
 {
-	Edge* e = graph_.randomEdge(rng_);
-	LocalConcentrationDifference c_diff(*e, model_->concentrations());
-	if (c_diff.value() == 0.0)
+	Edge* e = 0;
+	while (true)
 	{
-		weights_->setWeight(*e,
-				weights_->weight(*e) + opts_.params().weight_increment);
-	}
-	else if (weights_->weight(*e) >= opts_.params().weight_decrement)
-	{
-		weights_->setWeight(*e,
-				weights_->weight(*e) - opts_.params().weight_decrement);
+		e = graph_.randomEdge(rng_);
+		LocalConcentrationDifference c_diff(*e, model_->concentrations());
+		if (c_diff.value() == 0.0)
+		{
+			weights_->setWeight(*e,
+					weights_->weight(*e) + opts_.params().weight_increment);
+			break;
+		}
+		else if (weights_->weight(*e) >= opts_.params().weight_decrement)
+		{
+			weights_->setWeight(*e,
+					weights_->weight(*e) - opts_.params().weight_decrement);
+			break;
+		}
 	}
 }
 
