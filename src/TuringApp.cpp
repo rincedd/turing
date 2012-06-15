@@ -129,7 +129,15 @@ int TuringApp::exec()
 			ode::ode_traits<TuringModel>::time_type> loggers;
 	AveragesLogger* alog = new AveragesLogger(graph_, model_->concentrations(),
 			opts_.params().integration_timestep);
-	alog->setStream(streams_.openStream(makeFilename("averages")));
+
+	ostream& avg_strm = streams_.openStream(makeFilename("averages"));
+	avg_strm << "# Turing model on " << opts_.params().net_type
+			<< " network with " << graph_.numberOfNodes() << " nodes and "
+			<< graph_.numberOfEdges() << " edges.\n# Parameters:"
+			<< "\n# epsilon = " << opts_.params().activator_diffusion
+			<< "\n# sigma = " << opts_.params().diffusion_ratio_inhibitor_activator
+			<< "\n";
+	alog->setStream(avg_strm);
 	loggers.registerLogger(alog);
 	PatternLogger* plog = new PatternLogger(*model_, graph_,
 			opts_.params().integration_time);
