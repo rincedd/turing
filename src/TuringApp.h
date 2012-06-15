@@ -45,6 +45,7 @@ private:
 	void integrate(ode::ode_traits<TuringModel>::time_type from,
 			ode::ode_traits<TuringModel>::time_type to,
 			ode::ode_traits<TuringModel>::time_type dt, loggers_t& loggers);
+	void updateTopology();
 
 	std::string name_;
 	myrng::WELL1024a rng_;

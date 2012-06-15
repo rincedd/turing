@@ -34,6 +34,13 @@ public:
 			it->writeHeader(t);
 		}
 	}
+	void reset()
+	{
+		for (typename loggers_v::iterator it = loggers_.begin(); it != loggers_.end(); ++it)
+		{
+			it->reset();
+		}
+	}
 	void operator()(const state_type& state, const time_type t)
 	{
 		for (typename loggers_v::iterator it = loggers_.begin(); it != loggers_.end(); ++it)

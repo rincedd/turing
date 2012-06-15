@@ -28,6 +28,11 @@ public:
 	virtual ~PatternLogger()
 	{
 	}
+	void reset()
+	{
+		next_ = 0;
+		stream() << "\n\n";
+	}
 	void writeHeader(const time_type t)
 	{
 		stream() << "#t\tID\tk\tu\tv\n";

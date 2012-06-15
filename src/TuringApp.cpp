@@ -8,6 +8,8 @@
 #include "ode/Integrator.h"
 #include "loggers/AveragesLogger.h"
 #include "loggers/PatternLogger.h"
+#include "loggers/AverageEvolutionLogger.h"
+#include "model/measures/ConcentrationDifference.h"
 
 #include <largenet2/generators/generators.h>
 
@@ -83,6 +85,9 @@ void TuringApp::setup()
 	{
 		weights_->setWeight(e,
 				opts_.params().diffusion_ratio_inhibitor_activator);
+		weights_->setWeight(e, abs(
+				rng_.GaussianPolar(opts_.params().diffusion_ratio_inhibitor_activator,
+						0.01)));
 	}
 
 	TuringModel::Params p =
@@ -125,10 +130,25 @@ void TuringApp::integrate(ode::ode_traits<TuringModel>::time_type from,
 	integ.integrate(from, to, dt, loggers);
 }
 
+void TuringApp::updateTopology()
+{
+	Edge* e = graph_.randomEdge(rng_);
+	LocalConcentrationDifference c_diff(*e, model_->concentrations());
+	if (c_diff.value() == 0.0)
+	{
+		weights_->setWeight(*e,
+				weights_->weight(*e) + opts_.params().weight_increment);
+	}
+	else if (weights_->weight(*e) >= opts_.params().weight_decrement)
+	{
+		weights_->setWeight(*e,
+				weights_->weight(*e) - opts_.params().weight_decrement);
+	}
+}
+
 int TuringApp::exec()
 {
 	setup();
-	initConcentrations();
 
 	Loggers<ode::ode_traits<TuringModel>::state_type,
 			ode::ode_traits<TuringModel>::time_type> loggers;
@@ -149,7 +169,21 @@ int TuringApp::exec()
 	plog->setStream(streams_.openStream(makeFilename("patterns")));
 	loggers.registerLogger(plog);
 	loggers.writeHeaders(0.0);
-	integrate(0.0, opts_.params().integration_time,
-			opts_.params().integration_timestep, loggers);
+
+	AverageEvolutionLogger ae_log(graph_, *weights_, model_->concentrations());
+	ae_log.setStream(streams_.openStream(makeFilename("evolution")));
+	ae_log.writeHeader(0);
+	initConcentrations();
+	ae_log.log(model_->concentrations(), 0);
+	size_t iterations = 1;
+	for (; iterations <= opts_.params().num_iterations; ++iterations)
+	{
+		initConcentrations();
+		integrate(0.0, opts_.params().integration_time,
+				opts_.params().integration_timestep, loggers);
+		updateTopology();
+		ae_log.log(model_->concentrations(), iterations);
+		loggers.reset();
+	}
 	return 0;
 }

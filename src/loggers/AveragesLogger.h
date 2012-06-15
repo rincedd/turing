@@ -22,6 +22,11 @@ public:
 	virtual ~AveragesLogger()
 	{
 	}
+	void reset()
+	{
+		next_ = 0;
+		stream() << "\n\n";
+	}
 	void writeHeader(const time_type t)
 	{
 		stream() << "#t\tA\t<u>\t<v>\t<c_ij>\t[C_ij>0]\n";

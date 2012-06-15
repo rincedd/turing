@@ -12,6 +12,31 @@
 #include "../../ode/ode_traits.h"
 #include "../TuringModel.h"
 
+class LocalConcentrationDifference: public OrderParameter<double>
+{
+public:
+	LocalConcentrationDifference(const largenet::Edge& e,
+			const ode::ode_traits<TuringModel>::state_type& concentrations)
+	{
+		size_t K = concentrations.size() / 2;
+		value_ = abs(
+				concentrations[e.source()->id()]
+						- concentrations[e.target()->id()])
+				+ abs(
+						concentrations[e.source()->id() + K]
+								- concentrations[e.target()->id() + K]);
+	}
+	virtual ~LocalConcentrationDifference()
+	{
+	}
+	value_type value()
+	{
+		return value_;
+	}
+private:
+	value_type value_;
+};
+
 /**
  * 
  *

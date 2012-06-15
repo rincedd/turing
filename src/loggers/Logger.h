@@ -23,6 +23,7 @@ public:
 	}
 	virtual void log(const State& state, const Time t) = 0;
 	virtual void writeHeader(const Time t) = 0;
+	virtual void reset() {};
 };
 
 struct StreamOutput

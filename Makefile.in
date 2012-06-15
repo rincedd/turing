@@ -290,6 +290,7 @@ turing_SOURCES = \
 	src/loggers/Logger.h \
 	src/loggers/Loggers.h \
 	src/loggers/AveragesLogger.h \
+	src/loggers/AverageEvolutionLogger.h \
 	src/loggers/PatternLogger.h \
 	src/loggers/PatternLogger.cpp \
 	src/model/types.h \
