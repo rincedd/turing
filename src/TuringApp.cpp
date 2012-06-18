@@ -85,9 +85,9 @@ void TuringApp::setup()
 	{
 		weights_->setWeight(e,
 				opts_.params().diffusion_ratio_inhibitor_activator);
-		weights_->setWeight(e, abs(
-				rng_.GaussianPolar(opts_.params().diffusion_ratio_inhibitor_activator,
-						0.01)));
+//		weights_->setWeight(e, abs(
+//				rng_.GaussianPolar(opts_.params().diffusion_ratio_inhibitor_activator,
+//						0.01)));
 	}
 
 	TuringModel::Params p =
