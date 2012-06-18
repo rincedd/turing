@@ -2,6 +2,7 @@
 #define AVERAGESLOGGER_H_
 
 #include <largenet2.h>
+#include <iomanip>
 #include "Logger.h"
 #include "../model/TuringModel.h"
 #include "../model/measures/AverageConcentrations.h"
@@ -36,10 +37,10 @@ public:
 		if (t >= next_)
 		{
 			c_diff_.update();
-			stream() << t << "\t" << amplitude_.value() << "\t"
-					<< avg_act_.value() << "\t" << avg_inh_.value() << "\t"
-					<< c_diff_.value() << "\t" << c_diff_.positiveFraction()
-					<< "\n";
+			stream() << std::setprecision(9) << t << "\t" << amplitude_.value()
+					<< "\t" << avg_act_.value() << "\t" << avg_inh_.value()
+					<< "\t" << c_diff_.value() << "\t"
+					<< c_diff_.positiveFraction() << "\n";
 			next_ += interval_;
 		}
 	}
