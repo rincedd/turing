@@ -18,8 +18,8 @@
 class EdgeWeights: public largenet::GraphListener
 {
 public:
-	typedef boost::unordered::unordered_map<largenet::edge_id_t, double> edge_weight_map_t;
-	typedef boost::unordered::unordered_map<largenet::node_id_t, double> node_strength_map_t;
+	typedef boost::unordered_map<largenet::edge_id_t, double> edge_weight_map_t;
+	typedef boost::unordered_map<largenet::node_id_t, double> node_strength_map_t;
 
 public: // signals
 	boost::signals2::signal<void (const largenet::Edge&, double, double)> weight_changed;
