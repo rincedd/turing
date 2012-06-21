@@ -28,6 +28,7 @@ struct TuringParameters
 
 	size_t num_iterations;
 	double weight_increment, weight_decrement;
+	size_t integration_output_interval;
 };
 
 /**

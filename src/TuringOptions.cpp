@@ -38,7 +38,8 @@ void TuringOptions::init()
 			("avg-degree,k", po::value<double>(&par_.average_degree)->default_value(20), "Intended average degree of network.")
 			("iterations", po::value<size_t>(&par_.num_iterations)->default_value(10), "Number of topological update steps.")
 			("increment", po::value<double>(&par_.weight_increment)->default_value(0.1), "Edge weight increment")
-			("decrement", po::value<double>(&par_.weight_decrement)->default_value(0.01), "Edge weight decrement");
+			("decrement", po::value<double>(&par_.weight_decrement)->default_value(0.01), "Edge weight decrement")
+			("output-interval", po::value<size_t>(&par_.integration_output_interval)->default_value(5), "Log integration output every ARG iterations.");
 
 	intOpts.add_options()
 			("integration-time", po::value<double>(&par_.integration_time)->default_value(20.0), "Integration time.")
