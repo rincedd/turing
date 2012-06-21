@@ -33,13 +33,16 @@ public:
 
 	template<class Logger>
 	size_t integrate(const double t0, const double t1, const double dt,
-			Logger& logger)
+			Logger* logger = 0)
 	{
 		typedef bno::runge_kutta_dopri5<state_vector_t> error_stepper_t;
 		typedef bno::result_of::make_controlled<error_stepper_t>::type stepper_t;
 		stepper_t stepper = bno::make_controlled<error_stepper_t>(atol_, rtol_);
-		return bno::integrate_adaptive(stepper, boost::ref(sys_), state_, t0, t1, dt,
-				boost::ref(logger));
+		if (logger != 0)
+			return bno::integrate_adaptive(stepper, boost::ref(sys_), state_, t0, t1, dt,
+					boost::ref(*logger));
+		else
+			return bno::integrate_adaptive(stepper, boost::ref(sys_), state_, t0, t1, dt);
 	}
 
 private:

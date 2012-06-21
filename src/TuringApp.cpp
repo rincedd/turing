@@ -123,11 +123,12 @@ string TuringApp::makeFilename(string tag) const
 
 void TuringApp::integrate(ode::ode_traits<TuringModel>::time_type from,
 		ode::ode_traits<TuringModel>::time_type to,
-		ode::ode_traits<TuringModel>::time_type dt, loggers_t& loggers)
+		ode::ode_traits<TuringModel>::time_type dt, loggers_t* loggers)
 {
 	ode::Integrator<TuringModel> integ(*model_, model_->concentrations(),
 			opts_.params().atol, opts_.params().rtol);
 	integ.integrate(from, to, dt, loggers);
+
 }
 
 void TuringApp::updateTopology()
@@ -181,15 +182,24 @@ int TuringApp::exec()
 	ae_log.writeHeader(0);
 	initConcentrations();
 	ae_log.log(model_->concentrations(), 0);
-	size_t iterations = 1;
+	size_t iterations = 1, next = 1;
 	for (; iterations <= opts_.params().num_iterations; ++iterations)
 	{
 		initConcentrations();
-		integrate(0.0, opts_.params().integration_time,
-				opts_.params().integration_timestep, loggers);
+		if (iterations >= next)
+		{
+			integrate(0.0, opts_.params().integration_time,
+					opts_.params().integration_timestep, &loggers);
+			loggers.reset();
+			next += opts_.params().integration_output_interval;
+		}
+		else
+		{
+			integrate(0.0, opts_.params().integration_time,
+					opts_.params().integration_timestep);
+		}
 		updateTopology();
 		ae_log.log(model_->concentrations(), iterations);
-		loggers.reset();
 	}
 	return 0;
 }

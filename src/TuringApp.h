@@ -44,7 +44,7 @@ private:
 
 	void integrate(ode::ode_traits<TuringModel>::time_type from,
 			ode::ode_traits<TuringModel>::time_type to,
-			ode::ode_traits<TuringModel>::time_type dt, loggers_t& loggers);
+			ode::ode_traits<TuringModel>::time_type dt, loggers_t* loggers = 0);
 	void updateTopology();
 
 	std::string name_;
