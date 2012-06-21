@@ -7,6 +7,8 @@
 #define LOGGERS_H_
 
 #include "Logger.h"
+#include <boost/ptr_container/ptr_list.hpp>
+#include <algorithm>
 
 /**
  * 
@@ -20,36 +22,47 @@ public:
 	typedef typename Logger<State, Time>::state_type state_type;
 	typedef typename Logger<State, Time>::time_type time_type;
 private:
-	typedef boost::ptr_vector<logger_type> loggers_v;
+	typedef boost::ptr_list<logger_type> loggers_l;
 public:
-	Loggers() {}
+	Loggers()
+	{
+	}
 	void registerLogger(logger_type* o)
 	{
 		loggers_.push_back(o);
 	}
+	logger_type* unregisterLogger(logger_type* o)
+	{
+		typename loggers_l::iterator it = std::find(loggers_.begin(),
+				loggers_.end(), *o);
+		return loggers_.release(it);
+	}
 	void writeHeaders(const time_type t)
 	{
-		for (typename loggers_v::iterator it = loggers_.begin(); it != loggers_.end(); ++it)
+		for (typename loggers_l::iterator it = loggers_.begin();
+				it != loggers_.end(); ++it)
 		{
 			it->writeHeader(t);
 		}
 	}
 	void reset()
 	{
-		for (typename loggers_v::iterator it = loggers_.begin(); it != loggers_.end(); ++it)
+		for (typename loggers_l::iterator it = loggers_.begin();
+				it != loggers_.end(); ++it)
 		{
 			it->reset();
 		}
 	}
 	void operator()(const state_type& state, const time_type t)
 	{
-		for (typename loggers_v::iterator it = loggers_.begin(); it != loggers_.end(); ++it)
+		for (typename loggers_l::iterator it = loggers_.begin();
+				it != loggers_.end(); ++it)
 		{
 			it->log(state, t);
 		}
 	}
 private:
-	loggers_v loggers_;
+	loggers_l loggers_;
 };
 
 #endif /* LOGGERS_H_ */
