@@ -39,7 +39,8 @@ void TuringOptions::init()
 			("iterations", po::value<size_t>(&par_.num_iterations)->default_value(10), "Number of topological update steps.")
 			("increment", po::value<double>(&par_.weight_increment)->default_value(0.1), "Edge weight increment")
 			("decrement", po::value<double>(&par_.weight_decrement)->default_value(0.01), "Edge weight decrement")
-			("output-interval", po::value<size_t>(&par_.integration_output_interval)->default_value(5), "Log integration output every ARG iterations.");
+			("output-interval", po::value<size_t>(&par_.integration_output_interval)->default_value(5), "Log integration output every ARG iterations.")
+			("random-seed", po::value<unsigned long>(&par_.seed)->default_value(0), "Random number generator seed.");
 
 	intOpts.add_options()
 			("integration-time", po::value<double>(&par_.integration_time)->default_value(20.0), "Integration time.")

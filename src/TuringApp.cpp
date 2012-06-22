@@ -62,6 +62,8 @@ double g(double u, double v)
 
 void TuringApp::setup()
 {
+	if (opts_.params().seed > 0)
+		rng_.seed(opts_.params().seed);
 	if (opts_.params().net_type == "BA")
 	{
 		generators::randomBA(graph_, opts_.params().num_nodes,
@@ -153,6 +155,30 @@ void TuringApp::updateTopology()
 	}
 }
 
+void TuringApp::writeInfo(ostream& strm) const
+{
+	strm << "# Turing model on " << opts_.params().net_type << " network with "
+			<< graph_.numberOfNodes() << " nodes and " << graph_.numberOfEdges()
+			<< " edges.";
+	strm << "\n# Model parameters:" << "\n# epsilon = "
+			<< opts_.params().activator_diffusion << "\n# sigma = "
+			<< opts_.params().diffusion_ratio_inhibitor_activator;
+	strm << "\n#\n# Simulation parameters:"
+			<< "\n# Random number generator seed: " << opts_.params().seed
+			<< "\n# Integration time: " << opts_.params().integration_time
+			<< "\n# Integration output interval: "
+			<< opts_.params().integration_timestep
+			<< "\n# Integration tolerances: atol = " << opts_.params().atol
+			<< ", rtol = " << opts_.params().rtol
+			<< "\n# Number of topological updates: "
+			<< opts_.params().num_iterations << "\n# Logging interval: every "
+			<< opts_.params().integration_output_interval
+			<< " topological updates" << "\n# Weight increment delta_up = "
+			<< opts_.params().weight_increment
+			<< "\n# Weight decrement delta_down = "
+			<< opts_.params().weight_decrement << "\n";
+}
+
 int TuringApp::exec()
 {
 	setup();
@@ -161,14 +187,8 @@ int TuringApp::exec()
 			ode::ode_traits<TuringModel>::time_type> loggers;
 	AveragesLogger* alog = new AveragesLogger(graph_, model_->concentrations(),
 			opts_.params().integration_timestep);
-
 	ostream& avg_strm = streams_.openStream(makeFilename("averages"));
-	avg_strm << "# Turing model on " << opts_.params().net_type
-			<< " network with " << graph_.numberOfNodes() << " nodes and "
-			<< graph_.numberOfEdges() << " edges.\n# Parameters:"
-			<< "\n# epsilon = " << opts_.params().activator_diffusion
-			<< "\n# sigma = "
-			<< opts_.params().diffusion_ratio_inhibitor_activator << "\n";
+	writeInfo(avg_strm);
 	alog->setStream(avg_strm);
 	loggers.registerLogger(alog);
 	PatternLogger* plog = new PatternLogger(*model_, graph_,

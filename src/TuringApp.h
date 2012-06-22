@@ -35,6 +35,7 @@ public:
 	}
 	int exec();
 	virtual ~TuringApp();
+	void writeInfo(std::ostream& strm) const;
 protected:
 	std::string makeFilename(std::string tag) const;
 private:
