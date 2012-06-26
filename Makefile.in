@@ -63,6 +63,7 @@ am_turing_OBJECTS = src/turing-turing.$(OBJEXT) \
 	src/turing-TuringOptions.$(OBJEXT) \
 	src/turing-TuringApp.$(OBJEXT) \
 	src/loggers/turing-PatternLogger.$(OBJEXT) \
+	src/loggers/turing-SnapshotLogger.$(OBJEXT) \
 	src/model/turing-TuringModel.$(OBJEXT) \
 	src/model/measures/turing-ConcentrationDifference.$(OBJEXT) \
 	src/model/turing-DiffusionMatrix.$(OBJEXT) \
@@ -293,6 +294,8 @@ turing_SOURCES = \
 	src/loggers/AverageEvolutionLogger.h \
 	src/loggers/PatternLogger.h \
 	src/loggers/PatternLogger.cpp \
+	src/loggers/SnapshotLogger.h \
+	src/loggers/SnapshotLogger.cpp \
 	src/model/types.h \
 	src/model/TuringModel.h \
 	src/model/TuringModel.cpp \
@@ -440,6 +443,9 @@ src/loggers/$(DEPDIR)/$(am__dirstamp):
 src/loggers/turing-PatternLogger.$(OBJEXT):  \
 	src/loggers/$(am__dirstamp) \
 	src/loggers/$(DEPDIR)/$(am__dirstamp)
+src/loggers/turing-SnapshotLogger.$(OBJEXT):  \
+	src/loggers/$(am__dirstamp) \
+	src/loggers/$(DEPDIR)/$(am__dirstamp)
 src/model/$(am__dirstamp):
 	@$(MKDIR_P) src/model
 	@: > src/model/$(am__dirstamp)
@@ -483,6 +489,7 @@ turing$(EXEEXT): $(turing_OBJECTS) $(turing_DEPENDENCIES) $(EXTRA_turing_DEPENDE
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 	-rm -f src/loggers/turing-PatternLogger.$(OBJEXT)
+	-rm -f src/loggers/turing-SnapshotLogger.$(OBJEXT)
 	-rm -f src/model/measures/turing-AverageEdgeWeight.$(OBJEXT)
 	-rm -f src/model/measures/turing-AverageNodeStrength.$(OBJEXT)
 	-rm -f src/model/measures/turing-ConcentrationDifference.$(OBJEXT)
@@ -501,6 +508,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/turing-TuringOptions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/turing-turing.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/loggers/$(DEPDIR)/turing-PatternLogger.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/loggers/$(DEPDIR)/turing-SnapshotLogger.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-DiffusionMatrix.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/model/$(DEPDIR)/turing-TuringModel.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/model/measures/$(DEPDIR)/turing-AverageEdgeWeight.Po@am__quote@
@@ -588,6 +596,20 @@ src/loggers/turing-PatternLogger.obj: src/loggers/PatternLogger.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/loggers/PatternLogger.cpp' object='src/loggers/turing-PatternLogger.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/loggers/turing-PatternLogger.obj `if test -f 'src/loggers/PatternLogger.cpp'; then $(CYGPATH_W) 'src/loggers/PatternLogger.cpp'; else $(CYGPATH_W) '$(srcdir)/src/loggers/PatternLogger.cpp'; fi`
+
+src/loggers/turing-SnapshotLogger.o: src/loggers/SnapshotLogger.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/loggers/turing-SnapshotLogger.o -MD -MP -MF src/loggers/$(DEPDIR)/turing-SnapshotLogger.Tpo -c -o src/loggers/turing-SnapshotLogger.o `test -f 'src/loggers/SnapshotLogger.cpp' || echo '$(srcdir)/'`src/loggers/SnapshotLogger.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/loggers/$(DEPDIR)/turing-SnapshotLogger.Tpo src/loggers/$(DEPDIR)/turing-SnapshotLogger.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/loggers/SnapshotLogger.cpp' object='src/loggers/turing-SnapshotLogger.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/loggers/turing-SnapshotLogger.o `test -f 'src/loggers/SnapshotLogger.cpp' || echo '$(srcdir)/'`src/loggers/SnapshotLogger.cpp
+
+src/loggers/turing-SnapshotLogger.obj: src/loggers/SnapshotLogger.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/loggers/turing-SnapshotLogger.obj -MD -MP -MF src/loggers/$(DEPDIR)/turing-SnapshotLogger.Tpo -c -o src/loggers/turing-SnapshotLogger.obj `if test -f 'src/loggers/SnapshotLogger.cpp'; then $(CYGPATH_W) 'src/loggers/SnapshotLogger.cpp'; else $(CYGPATH_W) '$(srcdir)/src/loggers/SnapshotLogger.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/loggers/$(DEPDIR)/turing-SnapshotLogger.Tpo src/loggers/$(DEPDIR)/turing-SnapshotLogger.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/loggers/SnapshotLogger.cpp' object='src/loggers/turing-SnapshotLogger.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -c -o src/loggers/turing-SnapshotLogger.obj `if test -f 'src/loggers/SnapshotLogger.cpp'; then $(CYGPATH_W) 'src/loggers/SnapshotLogger.cpp'; else $(CYGPATH_W) '$(srcdir)/src/loggers/SnapshotLogger.cpp'; fi`
 
 src/model/turing-TuringModel.o: src/model/TuringModel.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(turing_CXXFLAGS) $(CXXFLAGS) -MT src/model/turing-TuringModel.o -MD -MP -MF src/model/$(DEPDIR)/turing-TuringModel.Tpo -c -o src/model/turing-TuringModel.o `test -f 'src/model/TuringModel.cpp' || echo '$(srcdir)/'`src/model/TuringModel.cpp

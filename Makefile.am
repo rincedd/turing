@@ -18,6 +18,8 @@ turing_SOURCES = \
 	src/loggers/AverageEvolutionLogger.h \
 	src/loggers/PatternLogger.h \
 	src/loggers/PatternLogger.cpp \
+	src/loggers/SnapshotLogger.h \
+	src/loggers/SnapshotLogger.cpp \
 	src/model/types.h \
 	src/model/TuringModel.h \
 	src/model/TuringModel.cpp \

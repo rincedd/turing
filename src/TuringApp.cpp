@@ -9,6 +9,7 @@
 #include "loggers/AveragesLogger.h"
 #include "loggers/PatternLogger.h"
 #include "loggers/AverageEvolutionLogger.h"
+#include "loggers/SnapshotLogger.h"
 #include "model/measures/ConcentrationDifference.h"
 
 #include <largenet2/generators/generators.h>
@@ -202,6 +203,12 @@ int TuringApp::exec()
 	ae_log.writeHeader(0);
 	initConcentrations();
 	ae_log.log(model_->concentrations(), 0);
+
+	SnapshotLogger slog(*model_, graph_, *weights_,
+			opts_.params().snapshot_interval);
+	slog.setStream(streams_.openStream(makeFilename("network")));
+	slog.writeHeader(0);
+
 	size_t iterations = 1, next = 1;
 	for (; iterations <= opts_.params().num_iterations; ++iterations)
 	{
@@ -220,6 +227,8 @@ int TuringApp::exec()
 		}
 		updateTopology();
 		ae_log.log(model_->concentrations(), iterations);
+		slog.log(model_->concentrations(), iterations);
 	}
+	slog.log(model_->concentrations(), iterations);
 	return 0;
 }
