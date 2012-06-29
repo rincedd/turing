@@ -48,9 +48,15 @@ void GraphStateReader::createFromStream(istream& strm, Graph& graph,
 
 	while (getline(strm, line))
 	{
-		detail::edge_info e;
+		if (line.empty())
+			break;
+
 		line += " ";
+		if (line[0] == '#')
+			continue;
+
 		ss.str(line);
+		detail::edge_info e;
 		ss >> e.source.id >> e.target.id;
 		if (ss.fail())
 			throw std::runtime_error("Cannot read input file");
@@ -69,7 +75,10 @@ void GraphStateReader::createFromStream(istream& strm, Graph& graph,
 	while (graph.numberOfNodes() < maxNodeID + 1)
 		graph.addNode();
 
-	size_t K = states.size() / 2;
+	if (states.size() < 2 * graph.numberOfNodes())
+		states.resize(2 * graph.numberOfNodes(), false);
+
+	size_t K = graph.numberOfNodes() / 2;
 	BOOST_FOREACH(detail::edge_info& e, edges)
 	{
 		edge_id_t eid = graph.addEdge(e.source.id, e.target.id, false);

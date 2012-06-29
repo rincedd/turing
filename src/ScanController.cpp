@@ -61,7 +61,8 @@ void ScanController::setup()
 
 	loadNetwork();
 
-	std::cout << graph_.numberOfNodes() << " and L = " << graph_.numberOfEdges()
+	std::cout << "Successfully loaded network with N = "
+			<< graph_.numberOfNodes() << " and L = " << graph_.numberOfEdges()
 			<< " (<k> = "
 			<< 2.0 * graph_.numberOfEdges() / graph_.numberOfNodes() << ").\n";
 }
