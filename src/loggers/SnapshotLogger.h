@@ -36,7 +36,7 @@ public:
 	}
 	void writeHeader(const time_type t)
 	{
-		stream() << "# source\ttarget\tweight\n";
+		stream() << "# source\ttarget\tweight\tu_s\tv_s\tu_t\tv_t\n";
 	}
 	void log(const state_type& state, const time_type t);
 private:
