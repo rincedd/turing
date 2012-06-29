@@ -49,6 +49,10 @@ void TuringOptions::init()
 			("atol", po::value<double>(&par_.atol)->default_value(1e-4), "Absolute error tolerance for integration.")
 			("rtol", po::value<double>(&par_.rtol)->default_value(1e-3), "Relative error tolerance for integration.");
 
+	allOptions_.add_options()
+			("mode", po::value<string>(&par_.mode)->default_value("evolve"), "Operation mode: evolve, scan.")
+			("file", po::value<string>(&par_.file)->default_value(""), "Network file to load in scan mode.");
+
 	allOptions_.add(modelOpts).add(iniOpts).add(simOpts).add(intOpts);
 }
 

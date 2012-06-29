@@ -3,11 +3,17 @@ ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS} -I m4
 bin_PROGRAMS = turing
 
 turing_SOURCES = \
+	src/mimura.h \
 	src/turing.cpp \
 	src/TuringOptions.cpp \
 	src/TuringOptions.h \
 	src/TuringApp.h \
 	src/TuringApp.cpp \
+	src/Controller.h \
+	src/EvolutionController.cpp \
+	src/EvolutionController.h \
+	src/ScanController.cpp \
+	src/ScanController.h \
 	src/OStreamCollection.h \
 	src/ode/ODE.h \
 	src/ode/ode_traits.h \
@@ -28,6 +34,10 @@ turing_SOURCES = \
 	src/model/measures/ConcentrationDifference.cpp \
 	src/model/DiffusionMatrix.h \
 	src/model/DiffusionMatrix.cpp \
+	src/model/GraphStateWriter.h \
+	src/model/GraphStateWriter.cpp \
+	src/model/GraphStateReader.h \
+	src/model/GraphStateReader.cpp \
 	src/model/measures/AverageEdgeWeight.h \
 	src/model/measures/AverageEdgeWeight.cpp \
 	src/model/measures/AverageNodeStrength.h \
@@ -35,13 +45,13 @@ turing_SOURCES = \
 	src/model/measures/AverageConcentrations.h \
 	src/model/measures/PatternAmplitude.h \
 	src/model/EdgeWeights.h \
-	src/myrng1.3/MTEngine.cpp \
-	src/myrng1.3/MTEngine.h \
-	src/myrng1.3/myrng.h \
-	src/myrng1.3/RandomVariates.h \
-	src/myrng1.3/util.h \
-	src/myrng1.3/WELLEngine.cpp \
-	src/myrng1.3/WELLEngine.h
+	src/myrng/MTEngine.cpp \
+	src/myrng/MTEngine.h \
+	src/myrng/myrng.h \
+	src/myrng/RandomVariates.h \
+	src/myrng/util.h \
+	src/myrng/WELLEngine.cpp \
+	src/myrng/WELLEngine.h
 
 if USE_BUILTIN_ODEINT
 ODEINT_CXXFLAGS = -I ${srcdir}/odeint

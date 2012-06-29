@@ -31,6 +31,8 @@ struct TuringParameters
 	size_t integration_output_interval;
 	size_t snapshot_interval;
 	unsigned long seed;
+
+	std::string mode, file;
 };
 
 /**

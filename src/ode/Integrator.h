@@ -15,6 +15,18 @@ namespace bno = boost::numeric::odeint;
 
 namespace ode
 {
+
+namespace detail
+{
+template<class State, class Time>
+class NullLogger
+{
+public:
+	void operator()(const State& state, const Time t) {}
+};
+
+}
+
 /**
  * 
  *
@@ -33,16 +45,22 @@ public:
 
 	template<class Logger>
 	size_t integrate(const double t0, const double t1, const double dt,
-			Logger* logger = 0)
+			Logger* logger)
 	{
 		typedef bno::runge_kutta_dopri5<state_vector_t> error_stepper_t;
 		typedef bno::result_of::make_controlled<error_stepper_t>::type stepper_t;
 		stepper_t stepper = bno::make_controlled<error_stepper_t>(atol_, rtol_);
 		if (logger != 0)
-			return bno::integrate_adaptive(stepper, boost::ref(sys_), state_, t0, t1, dt,
-					boost::ref(*logger));
+			return bno::integrate_adaptive(stepper, boost::ref(sys_), state_,
+					t0, t1, dt, boost::ref(*logger));
 		else
-			return bno::integrate_adaptive(stepper, boost::ref(sys_), state_, t0, t1, dt);
+			return bno::integrate_adaptive(stepper, boost::ref(sys_), state_,
+					t0, t1, dt);
+	}
+
+	size_t integrate(const double t0, const double t1, const double dt)
+	{
+		return integrate<detail::NullLogger<state_type, time_type> >(t0, t1, dt, 0);
 	}
 
 private:

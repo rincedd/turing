@@ -7,6 +7,7 @@
 #define EDGEWEIGHTS_H_
 
 #include <largenet2/base/GraphListener.h>
+#include <largenet2.h>
 #include <boost/unordered_map.hpp>
 #include <boost/signals2/signal.hpp>
 #include <boost/foreach.hpp>
