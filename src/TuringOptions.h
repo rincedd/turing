@@ -51,13 +51,7 @@ public:
 	class UsageError: public boost::program_options::error
 	{
 	public:
-		UsageError(boost::program_options::options_description& opts) : error(""), opts_(opts) {}
-		const char* what() const throw()
-		{
-			return "Invalid usage.";
-		}
-	private:
-		boost::program_options::options_description& opts_;
+		explicit UsageError(const std::string& xwhat) : error(xwhat) {}
 	};
 public:
 	TuringOptions();

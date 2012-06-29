@@ -80,6 +80,9 @@ void TuringOptions::parseCommandLine(int argc, char** argv)
 		throw ParsingError(e);
 	}
 	if (vm_.count("help"))
-		throw UsageError(allOptions_);
+		throw UsageError("");
+
+	if (par_.mode == "scan" && par_.file.empty())
+		throw ParsingError("Must provide file name in scan mode.");
 }
 
