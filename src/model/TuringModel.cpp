@@ -19,6 +19,11 @@ TuringModel::~TuringModel()
 {
 }
 
+void TuringModel::refresh(const EdgeWeights& w)
+{
+	diff_matrix_.recompute(w);
+}
+
 const TuringModel::state_type& TuringModel::concentrations() const
 {
 	return concentrations_;

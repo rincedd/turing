@@ -1,12 +1,16 @@
 #include "EvolutionController.h"
+
 #include "model/EdgeWeights.h"
 #include "ode/Integrator.h"
-#include "loggers/AveragesLogger.h"
+#include "loggers/Loggers.h"
 #include "loggers/PatternLogger.h"
+#include "Filename.h"
+#include "mimura.h"
 #include "loggers/AverageEvolutionLogger.h"
 #include "loggers/SnapshotLogger.h"
 #include "model/measures/ConcentrationDifference.h"
-#include "mimura.h"
+#include "loggers/AveragesLogger.h"
+
 #include <largenet2/generators/generators.h>
 
 using namespace largenet;
@@ -77,15 +81,6 @@ void EvolutionController::initConcentrations()
 	}
 }
 
-string EvolutionController::makeFilename(string tag) const
-{
-	string s(name());
-	if (!s.empty())
-		s += "-";
-	s += opts_.toStr() + "-" + tag + ".dat";
-	return s;
-}
-
 void EvolutionController::updateTopology()
 {
 	Edge* e = 0;
@@ -140,25 +135,25 @@ int EvolutionController::exec()
 			ode::ode_traits<TuringModel>::time_type> loggers;
 	AveragesLogger* alog = new AveragesLogger(graph_, model_->concentrations(),
 			opts_.params().integration_timestep);
-	ostream& avg_strm = streams_.openStream(makeFilename("averages"));
+	ostream& avg_strm = streams_.openStream(Filename(name(), opts_, "averages"));
 	writeInfo(avg_strm);
 	alog->setStream(avg_strm);
 	loggers.registerLogger(alog);
 	PatternLogger* plog = new PatternLogger(*model_, graph_,
 			opts_.params().integration_time);
-	plog->setStream(streams_.openStream(makeFilename("patterns")));
+	plog->setStream(streams_.openStream(Filename(name(), opts_, "patterns")));
 	loggers.registerLogger(plog);
 	loggers.writeHeaders(0.0);
 
 	AverageEvolutionLogger ae_log(graph_, *weights_, model_->concentrations());
-	ae_log.setStream(streams_.openStream(makeFilename("evolution")));
+	ae_log.setStream(streams_.openStream(Filename(name(), opts_, "evolution")));
 	ae_log.writeHeader(0);
 	initConcentrations();
 	ae_log.log(model_->concentrations(), 0);
 
 	SnapshotLogger slog(*model_, graph_, *weights_,
 			opts_.params().snapshot_interval);
-	slog.setStream(streams_.openStream(makeFilename("network")));
+	slog.setStream(streams_.openStream(Filename(name(), opts_, "network")));
 	slog.writeHeader(0);
 
 	ode::Integrator<TuringModel> integ(*model_, model_->concentrations(),

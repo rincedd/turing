@@ -38,13 +38,13 @@ int TuringApp::exec()
 	if (opts_.params().mode == "evolve")
 	{
 		EvolutionController ctrl(opts_);
-		ctrl.setName("turing");
+		ctrl.setName("evol");
 		return ctrl.exec();
 	}
 	else if (opts_.params().mode == "scan")
 	{
 		ScanController ctrl(opts_);
-		ctrl.setName("turing");
+		ctrl.setName("scan");
 		return ctrl.exec();
 	}
 	else

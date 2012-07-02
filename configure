@@ -15747,8 +15747,7 @@ else
 fi
 
 
-if test "x$debug" = xno; then
-   if test "x$debug" = "xyes"; then
+ if test "x$debug" = "xyes"; then
   DEBUGMODE_TRUE=
   DEBUGMODE_FALSE='#'
 else
@@ -15756,7 +15755,6 @@ else
   DEBUGMODE_FALSE=
 fi
 
-fi
 
 # configure option --with-builtin-odeint [=yes]
 

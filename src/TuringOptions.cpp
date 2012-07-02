@@ -20,7 +20,7 @@ void TuringOptions::init()
 {
 	po::options_description modelOpts("Model parameters"), iniOpts(
 			"Initial conditions"), simOpts("Simulation parameters"),
-			intOpts("Integration parameters");
+			intOpts("Integration parameters"), scanOpts("Scan options");
 
 	modelOpts.add_options()
 			("epsilon,e", po::value<double>(&par_.activator_diffusion)->default_value(0.12), "Diffusion constant of activator.")
@@ -49,11 +49,15 @@ void TuringOptions::init()
 			("atol", po::value<double>(&par_.atol)->default_value(1e-4), "Absolute error tolerance for integration.")
 			("rtol", po::value<double>(&par_.rtol)->default_value(1e-3), "Relative error tolerance for integration.");
 
+	scanOpts.add_options()
+			("low", po::value<double>(&par_.scan_low)->default_value(0.8), "Lower value of scan parameter.")
+			("high", po::value<double>(&par_.scan_high)->default_value(1.2), "Upper value of scan parameter.");
+
 	allOptions_.add_options()
 			("mode", po::value<string>(&par_.mode)->default_value("evolve"), "Operation mode: evolve, scan.")
 			("file", po::value<string>(&par_.file)->default_value(""), "Network file to load in scan mode.");
 
-	allOptions_.add(modelOpts).add(iniOpts).add(simOpts).add(intOpts);
+	allOptions_.add(modelOpts).add(iniOpts).add(simOpts).add(intOpts).add(scanOpts);
 }
 
 string TuringOptions::toStr() const

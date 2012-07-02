@@ -41,6 +41,8 @@ public:
 
 	void operator()(const state_type& y, state_type& dydx, const time_type x);
 
+	void refresh(const EdgeWeights& w);
+
 	const state_type& concentrations() const;
 	state_type& concentrations();
 

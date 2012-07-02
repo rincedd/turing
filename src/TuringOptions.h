@@ -33,6 +33,8 @@ struct TuringParameters
 	unsigned long seed;
 
 	std::string mode, file;
+
+	double scan_low, scan_high;
 };
 
 /**

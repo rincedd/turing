@@ -13,6 +13,7 @@
 #include "model/TuringModel.h"
 #include "ode/ode_traits.h"
 #include "myrng/myrng.h"
+#include "OStreamCollection.h"
 #include <largenet2.h>
 
 class EdgeWeights;
@@ -23,18 +24,22 @@ public:
 	ScanController(TuringOptions& opts);
 	virtual ~ScanController();
 	int exec();
+	void writeInfo(std::ostream& strm) const;
 
 private:
 	void setup();
 	void loadNetwork();
-	void createModel(ode::ode_traits<TuringModel>::state_type& concentrations);
+	TuringModel* createModel(ode::ode_traits<TuringModel>::state_type& concentrations);
+	void initConcentrations();
+	void updateTopology(double scan_par);
 
 private:
 	myrng::WELL1024a rng_;
 	TuringOptions& opts_;
 	largenet::Graph graph_;
-	EdgeWeights* weights_;
+	EdgeWeights* weights_, *orig_weights_;
 	TuringModel* model_;
+	OStreamCollection streams_;
 };
 
 #endif /* SCANCONTROLLER_H_ */

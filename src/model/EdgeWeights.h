@@ -22,31 +22,87 @@ public:
 	typedef boost::unordered_map<largenet::edge_id_t, double> edge_weight_map_t;
 	typedef boost::unordered_map<largenet::node_id_t, double> node_strength_map_t;
 
-public: // signals
-	boost::signals2::signal<void (const largenet::Edge&, double, double)> weight_changed;
+public:
+	// signals
+	boost::signals2::signal<void(const largenet::edge_id_t, double, double)> weight_changed;
 
 public:
+	EdgeWeights()
+	{
+	}
 	/**
 	 * Constructor.
 	 * @param n (initial) number of edges to allocate space for
 	 */
-	EdgeWeights(largenet::edge_size_t num_edges, largenet::node_size_t num_nodes) :
+	EdgeWeights(largenet::edge_size_t num_edges,
+			largenet::node_size_t num_nodes) :
 			weights_(num_edges / 2), strengths_(num_nodes / 2)
 	{
 	}
+
+	EdgeWeights(const EdgeWeights& o)
+	{
+		weights_.insert(o.weights_.begin(), o.weights_.end());
+		strengths_.insert(o.strengths_.begin(), o.strengths_.end());
+	}
+
+	size_t size()
+	{
+		return weights_.size();
+	}
+
+	void assign(const EdgeWeights& o)
+	{
+		if (&o == this)
+			return;
+
+		if (o.weights_.size() != weights_.size())
+			throw std::runtime_error("Cannot assign weights of unequal size.");
+
+		weights_.rehash(o.weights_.size() / weights_.max_load_factor() + 1);
+
+		BOOST_FOREACH(edge_weight_map_t::value_type it, o.weights_)
+		{
+			double old_weight = weights_[it.first], new_weight = it.second;
+			weights_[it.first] = new_weight;
+			if (new_weight != old_weight)
+				weight_changed(it.first, old_weight, new_weight);
+		}
+
+		BOOST_FOREACH(node_strength_map_t::value_type it, o.strengths_)
+		{
+			strengths_[it.first] = it.second;
+		}
+	}
+
 	virtual ~EdgeWeights()
 	{
 	}
 
+	void scale(double factor)
+	{
+		BOOST_FOREACH(edge_weight_map_t::value_type it, weights_)
+		{
+			double old_weight = it.second, new_weight = old_weight * factor;
+			weights_[it.first] = new_weight;
+			weight_changed(it.first, old_weight, new_weight);
+		}
+
+		BOOST_FOREACH(node_strength_map_t::value_type it, strengths_)
+		{
+			strengths_[it.first] = factor * it.second;
+		}
+	}
+
 	void setWeight(const largenet::Edge& e, double value)
 	{
-		double old_weight = weights_[e.id()];	// will default-construct weight if e is not present
+		double old_weight = weights_[e.id()]; // will default-construct weight if e is not present
 		weights_[e.id()] = value;
 
 		/// FIXME this could be problematic due to round-off errors
 		strengths_[e.source()->id()] += value - old_weight;
 		strengths_[e.target()->id()] += value - old_weight;
-		weight_changed(e, old_weight, value);
+		weight_changed(e.id(), old_weight, value);
 	}
 
 	double operator()(const largenet::edge_id_t e) const
@@ -79,8 +135,14 @@ public:
 		return strengths_.at(n);
 	}
 
-	const edge_weight_map_t& weights() const { return weights_; }
-	const node_strength_map_t& strengths() const { return strengths_; }
+	const edge_weight_map_t& weights() const
+	{
+		return weights_;
+	}
+	const node_strength_map_t& strengths() const
+	{
+		return strengths_;
+	}
 
 private:
 //	void afterEdgeAddEvent(largenet::Graph& g, largenet::Edge& e);

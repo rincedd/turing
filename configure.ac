@@ -24,9 +24,7 @@ AC_ARG_ENABLE([debug],
 			   [debug="$withval"],
 			   [debug=no])
 
-if test "x$debug" = xno; then
-  AM_CONDITIONAL([DEBUGMODE], [test "x$debug" = "xyes"])
-fi
+AM_CONDITIONAL([DEBUGMODE], [test "x$debug" = "xyes"])
 
 # configure option --with-builtin-odeint [=yes]
 AC_ARG_WITH([builtin-odeint], 
