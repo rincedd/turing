@@ -8,6 +8,7 @@
 
 #include "OrderParameter.h"
 #include <largenet2.h>
+#include <boost/signals2/signal.hpp>
 
 class EdgeWeights;
 
@@ -24,10 +25,11 @@ public:
 
 private:
 	void compute();
-	void update(const largenet::Edge& e, double old_weight, double new_weight);
+	void update(const largenet::edge_id_t e, double old_weight, double new_weight);
 
 	EdgeWeights& weights_;
 	value_type value_;
+	boost::signals2::scoped_connection weight_change_connection_;
 };
 
 #endif /* AVERAGENODESTRENGTH_H_ */

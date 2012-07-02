@@ -14,7 +14,7 @@ AverageNodeStrength::AverageNodeStrength(EdgeWeights& weights) :
 		weights_(weights), value_(0)
 {
 	compute();
-	weights_.weight_changed.connect(
+	weight_change_connection_ = weights_.weight_changed.connect(
 			boost::bind(&AverageNodeStrength::update, this, _1, _2, _3));
 }
 
@@ -32,7 +32,7 @@ void AverageNodeStrength::compute()
 	value_ /= weights_.strengths().size();
 }
 
-void AverageNodeStrength::update(const Edge& e, double old_weight,
+void AverageNodeStrength::update(const edge_id_t e, double old_weight,
 		double new_weight)
 {
 	compute();

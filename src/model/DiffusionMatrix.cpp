@@ -15,10 +15,10 @@ namespace bnu = boost::numeric::ublas;
 
 DiffusionMatrix::DiffusionMatrix(const Graph& g, EdgeWeights& w,
 		double prefactor) :
-		prefactor_(prefactor)
+		graph_(g), prefactor_(prefactor)
 {
-	recompute(g, w);
-	w.weight_changed.connect(
+	recompute(w);
+	weight_change_connection_ = w.weight_changed.connect(
 			boost::bind(&DiffusionMatrix::updateEdgeWeight, this, _1, _2, _3));
 }
 
@@ -26,10 +26,10 @@ DiffusionMatrix::~DiffusionMatrix()
 {
 }
 
-void DiffusionMatrix::recompute(const Graph& g, const EdgeWeights& w)
+void DiffusionMatrix::recompute(const EdgeWeights& w)
 {
-	d_matrix_t lw = -measures::weighted_laplacian(g, w);
-	d_matrix_t l = -measures::laplacian(g);
+	d_matrix_t lw = -measures::weighted_laplacian(graph_, w);
+	d_matrix_t l = -measures::laplacian(graph_);
 
 	if ((matrix_.size1() != 2 * l.size1())
 			|| (matrix_.size2() != 2 * l.size2()))
@@ -43,10 +43,11 @@ void DiffusionMatrix::recompute(const Graph& g, const EdgeWeights& w)
 	matrix_ *= prefactor_;
 }
 
-void DiffusionMatrix::updateEdgeWeight(const Edge& e, double old_weight,
+void DiffusionMatrix::updateEdgeWeight(const edge_id_t e, double old_weight,
 		double new_weight)
 {
-	size_t i = e.source()->id(), j = e.target()->id();
+	const Edge* edge = graph_.edge(e);
+	size_t i = edge->source()->id(), j = edge->target()->id();
 	if (i == j)
 		return;
 

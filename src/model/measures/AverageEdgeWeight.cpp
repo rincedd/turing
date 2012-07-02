@@ -14,7 +14,7 @@ AverageEdgeWeight::AverageEdgeWeight(EdgeWeights& weights) :
 		weights_(weights), value_(0)
 {
 	compute();
-	weights_.weight_changed.connect(
+	weight_change_connection_ =  weights_.weight_changed.connect(
 			boost::bind(&AverageEdgeWeight::update, this, _1, _2, _3));
 }
 
@@ -32,7 +32,7 @@ void AverageEdgeWeight::compute()
 	value_ /= weights_.weights().size();
 }
 
-void AverageEdgeWeight::update(const Edge& e, double old_weight,
+void AverageEdgeWeight::update(const edge_id_t e, double old_weight,
 		double new_weight)
 {
 	if (old_weight == 0.0)
