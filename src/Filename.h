@@ -8,25 +8,22 @@
 #ifndef FILENAME_H_
 #define FILENAME_H_
 
-#include "TuringOptions.h"
 #include <string>
 
 class Filename
 {
 public:
-	explicit Filename(const std::string& name, const TuringOptions& opts,
+	template<class Options>
+	Filename(const std::string& name, const Options& opts,
 			const std::string& tag = "") :
 			value_(name)
 	{
-		if (!value_.empty())
+		if (value_ != "")
 			value_ += "-";
 		value_ += opts.toStr();
-		if (!tag.empty())
+		if (tag != "")
 			value_ += "-" + tag;
 		value_ += ".dat";
-	}
-	~Filename()
-	{
 	}
 
 	operator std::string() const
