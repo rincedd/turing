@@ -46,7 +46,7 @@ public:
 		strengths_.insert(o.strengths_.begin(), o.strengths_.end());
 	}
 
-	size_t size()
+	size_t size() const
 	{
 		return weights_.size();
 	}

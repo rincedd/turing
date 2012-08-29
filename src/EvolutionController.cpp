@@ -50,6 +50,18 @@ void EvolutionController::setup()
 			<< 2.0 * graph_.numberOfEdges() / graph_.numberOfNodes() << ").\n";
 
 	weights_ = new EdgeWeights(graph_.numberOfEdges(), graph_.numberOfNodes());
+	initWeights();
+
+	TuringModel::Params p =
+	{ opts_.params().activator_diffusion,
+			opts_.params().diffusion_ratio_inhibitor_activator };
+	TuringModel::Coupling c =
+	{ mimura::f, mimura::g };
+	model_ = new TuringModel(graph_, *weights_, p, c);
+}
+
+void EvolutionController::initWeights()
+{
 	BOOST_FOREACH(const Edge& e, graph_.edges())
 	{
 		weights_->setWeight(e,
@@ -58,13 +70,6 @@ void EvolutionController::setup()
 //				rng_.GaussianPolar(opts_.params().diffusion_ratio_inhibitor_activator,
 //						0.01)));
 	}
-
-	TuringModel::Params p =
-	{ opts_.params().activator_diffusion,
-			opts_.params().diffusion_ratio_inhibitor_activator };
-	TuringModel::Coupling c =
-	{ mimura::f, mimura::g };
-	model_ = new TuringModel(graph_, *weights_, p, c);
 }
 
 void EvolutionController::initConcentrations()
